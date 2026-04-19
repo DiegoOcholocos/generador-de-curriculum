@@ -1,4 +1,4 @@
-# CVWizard Pro — Generador de Currículums Local / Local CV Generator
+# CVDiego8 Pro — Generador de Currículums Local / Local CV Generator
 
 ---
 
