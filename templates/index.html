@@ -1,0 +1,2332 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>CVDiego8 Pro</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0c0c12;
+            --surf: #13131c;
+            --card: #1a1a26;
+            --card2: #20202e;
+            --bdr: #262636;
+            --bdr2: #30304a;
+            --acc: #e94560;
+            --acc2: #7c3aed;
+            --grn: #10b981;
+            --gold: #f59e0b;
+            --txt: #eeeef8;
+            --sub: #8888aa;
+            --sub2: #55556a;
+            --R: 9px;
+            --R2: 13px;
+            --PANEL: 375px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--txt);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column
+        }
+
+        /* ── TOPBAR ── */
+        .topbar {
+            height: 54px;
+            background: var(--surf);
+            border-bottom: 1px solid var(--bdr);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            gap: 8px;
+            flex-shrink: 0
+        }
+
+        .logo {
+            font-family: 'Fraunces', serif;
+            font-size: 21px;
+            letter-spacing: -.3px;
+            margin-right: 6px
+        }
+
+        .logo em {
+            color: var(--acc);
+            font-style: normal
+        }
+
+        .logo sup {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 8px;
+            font-weight: 600;
+            color: var(--acc2);
+            letter-spacing: 1px;
+            vertical-align: super;
+            text-transform: uppercase
+        }
+
+        .sep {
+            flex: 1
+        }
+
+        .btn {
+            height: 32px;
+            padding: 0 13px;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all .16s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid var(--bdr2);
+            color: var(--sub)
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--acc);
+            color: var(--acc);
+            background: rgba(233, 69, 96, .07)
+        }
+
+        .btn-red {
+            background: var(--acc);
+            color: #fff
+        }
+
+        .btn-red:hover {
+            background: #d63850;
+            box-shadow: 0 3px 14px rgba(233, 69, 96, .4);
+            transform: translateY(-1px)
+        }
+
+        .btn-pur {
+            background: var(--acc2);
+            color: #fff
+        }
+
+        .btn-pur:hover {
+            background: #6d28d9
+        }
+
+        .btn-grn {
+            background: var(--grn);
+            color: #fff
+        }
+
+        .btn-grn:hover {
+            background: #059669
+        }
+
+        /* ── WORKSPACE ── */
+        .ws {
+            display: grid;
+            grid-template-columns: var(--PANEL) 1fr;
+            flex: 1;
+            overflow: hidden
+        }
+
+        /* ── LEFT ── */
+        .lp {
+            background: var(--surf);
+            border-right: 1px solid var(--bdr);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--bdr);
+            flex-shrink: 0;
+            padding: 0 4px
+        }
+
+        .tab {
+            padding: 11px 12px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--sub);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all .14s;
+            white-space: nowrap
+        }
+
+        .tab:hover {
+            color: var(--txt)
+        }
+
+        .tab.on {
+            color: var(--acc);
+            border-bottom-color: var(--acc)
+        }
+
+        .pane {
+            flex: 1;
+            overflow-y: auto;
+            padding: 14px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--bdr2) transparent
+        }
+
+        .pane-hidden {
+            display: none !important
+        }
+
+        /* ── SECTION NAV ── */
+        .snav {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            margin-bottom: 12px
+        }
+
+        .sbtn {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 7px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--sub);
+            border: 1px solid transparent;
+            transition: all .12s
+        }
+
+        .sbtn:hover {
+            background: var(--card);
+            color: var(--txt)
+        }
+
+        .sbtn.on {
+            background: rgba(233, 69, 96, .1);
+            color: var(--acc);
+            border-color: rgba(233, 69, 96, .2)
+        }
+
+        .sbtn .ic {
+            width: 26px;
+            height: 26px;
+            border-radius: 7px;
+            background: var(--card2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            flex-shrink: 0
+        }
+
+        .sbtn.on .ic {
+            background: rgba(233, 69, 96, .18)
+        }
+
+        .sbtn .badge {
+            margin-left: auto;
+            background: var(--card2);
+            color: var(--sub);
+            font-size: 10px;
+            padding: 2px 7px;
+            border-radius: 20px;
+            font-weight: 600
+        }
+
+        .sbtn.on .badge {
+            background: var(--acc);
+            color: #fff
+        }
+
+        .sbtn .chk {
+            margin-left: auto;
+            color: var(--grn);
+            font-size: 12px;
+            display: none
+        }
+
+        .sbtn.done .chk {
+            display: inline
+        }
+
+        .sbtn.done .badge {
+            display: none
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--bdr);
+            margin: 8px 0
+        }
+
+        /* ── TEMPLATE GRID ── */
+        .tgrid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+            margin-bottom: 4px
+        }
+
+        .tc {
+            cursor: pointer;
+            border-radius: 8px;
+            border: 2px solid var(--bdr2);
+            transition: all .18s;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 4px;
+            background: var(--card)
+        }
+
+        .tc:hover {
+            border-color: var(--acc);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(233, 69, 96, .2)
+        }
+
+        .tc.on {
+            border-color: var(--acc);
+            box-shadow: 0 0 0 3px rgba(233, 69, 96, .22)
+        }
+
+        .tmini {
+            width: 54px;
+            height: 68px;
+            overflow: hidden
+        }
+
+        .tlabel {
+            font-size: 8px;
+            color: var(--sub);
+            font-weight: 500;
+            text-align: center;
+            padding: 2px 2px 0;
+            margin-top: 2px
+        }
+
+        .tc.on .tlabel {
+            color: var(--acc)
+        }
+
+        /* ── FORMS ── */
+        .fp {
+            display: none
+        }
+
+        .fp.on {
+            display: block
+        }
+
+        .ft {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 3px
+        }
+
+        .fd {
+            font-size: 12px;
+            color: var(--sub);
+            margin-bottom: 14px;
+            line-height: 1.5
+        }
+
+        .fg {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 10px
+        }
+
+        .fg label {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--sub);
+            text-transform: uppercase;
+            letter-spacing: .8px
+        }
+
+        .fg input,
+        .fg textarea,
+        .fg select {
+            background: var(--card2);
+            border: 1px solid var(--bdr2);
+            color: var(--txt);
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            outline: none;
+            transition: border-color .15s, box-shadow .15s;
+            width: 100%
+        }
+
+        .fg input:focus,
+        .fg textarea:focus,
+        .fg select:focus {
+            border-color: var(--acc);
+            box-shadow: 0 0 0 3px rgba(233, 69, 96, .1)
+        }
+
+        .fg input::placeholder,
+        .fg textarea::placeholder {
+            color: var(--sub2)
+        }
+
+        .fg textarea {
+            resize: vertical;
+            min-height: 72px
+        }
+
+        .fg select option {
+            background: var(--card2)
+        }
+
+        .r2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 9px
+        }
+
+        .r3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 9px
+        }
+
+        /* item cards */
+        .ic-card {
+            background: var(--card2);
+            border: 1px solid var(--bdr2);
+            border-radius: var(--R2);
+            padding: 12px;
+            margin-bottom: 8px;
+            transition: border-color .18s
+        }
+
+        .ic-card:hover {
+            border-color: var(--acc2)
+        }
+
+        .ic-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px
+        }
+
+        .ic-title {
+            font-size: 13px;
+            font-weight: 600
+        }
+
+        .del-btn {
+            width: 26px;
+            height: 26px;
+            border-radius: 7px;
+            background: rgba(233, 69, 96, .1);
+            border: 1px solid rgba(233, 69, 96, .2);
+            color: var(--acc);
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .14s;
+            flex-shrink: 0
+        }
+
+        .del-btn:hover {
+            background: rgba(233, 69, 96, .22)
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 9px;
+            background: transparent;
+            border: 1.5px dashed var(--bdr2);
+            border-radius: var(--R);
+            color: var(--sub);
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12.5px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all .16s;
+            margin-top: 3px
+        }
+
+        .add-btn:hover {
+            border-color: var(--acc);
+            color: var(--acc);
+            background: rgba(233, 69, 96, .04)
+        }
+
+        /* skill row */
+        .sk-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--card2);
+            border: 1px solid var(--bdr2);
+            border-radius: 8px;
+            padding: 8px 10px;
+            margin-bottom: 7px
+        }
+
+        .sk-row input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 0;
+            font-size: 13px;
+            color: var(--txt);
+            font-family: 'DM Sans', sans-serif;
+            outline: none
+        }
+
+        .dots {
+            display: flex;
+            gap: 4px
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--bdr2);
+            cursor: pointer;
+            transition: all .14s
+        }
+
+        .dot.on {
+            background: var(--acc)
+        }
+
+        .dot:hover {
+            transform: scale(1.3)
+        }
+
+        /* lang row */
+        .lg-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--card2);
+            border: 1px solid var(--bdr2);
+            border-radius: 8px;
+            padding: 8px 10px;
+            margin-bottom: 7px
+        }
+
+        .lg-row input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 0;
+            font-size: 13px;
+            color: var(--txt);
+            font-family: 'DM Sans', sans-serif;
+            outline: none
+        }
+
+        .lg-row select {
+            background: var(--card);
+            border: 1px solid var(--bdr2);
+            color: var(--txt);
+            padding: 5px 8px;
+            font-size: 12px;
+            border-radius: 6px;
+            font-family: 'DM Sans', sans-serif;
+            outline: none
+        }
+
+        .lg-row select:focus {
+            border-color: var(--acc)
+        }
+
+        /* photo */
+        .photo-box {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--card2);
+            border: 1px solid var(--bdr2);
+            border-radius: 12px;
+            padding: 13px;
+            margin-bottom: 14px
+        }
+
+        .photo-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: var(--card);
+            border: 2px dashed var(--bdr2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            overflow: hidden;
+            transition: border-color .18s
+        }
+
+        .photo-circle:hover {
+            border-color: var(--acc)
+        }
+
+        .photo-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none
+        }
+
+        /* CSV zone */
+        .csv-zone {
+            border: 2px dashed var(--bdr2);
+            border-radius: var(--R2);
+            padding: 22px;
+            text-align: center;
+            cursor: pointer;
+            transition: all .18s;
+            margin-bottom: 13px
+        }
+
+        .csv-zone:hover,
+        .csv-zone.drag {
+            border-color: var(--grn);
+            background: rgba(16, 185, 129, .05)
+        }
+
+        .csv-zone .ci {
+            font-size: 32px;
+            margin-bottom: 7px
+        }
+
+        .csv-zone p {
+            font-size: 13px;
+            color: var(--sub);
+            line-height: 1.5
+        }
+
+        /* profiles */
+        .pro-card {
+            background: var(--card2);
+            border: 1px solid var(--bdr2);
+            border-radius: var(--R2);
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all .18s;
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .pro-card:hover {
+            border-color: var(--acc2);
+            background: rgba(124, 58, 237, .06)
+        }
+
+        .pro-av {
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+            background: linear-gradient(135deg, var(--acc), var(--acc2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+            font-family: 'Fraunces', serif
+        }
+
+        .pro-info {
+            flex: 1;
+            min-width: 0
+        }
+
+        .pro-name {
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis
+        }
+
+        .pro-meta {
+            font-size: 11px;
+            color: var(--sub);
+            margin-top: 1px
+        }
+
+        .pro-tpl {
+            font-size: 10px;
+            padding: 2px 7px;
+            border-radius: 20px;
+            background: var(--card);
+            color: var(--sub);
+            border: 1px solid var(--bdr);
+            text-transform: capitalize;
+            white-space: nowrap
+        }
+
+        .pro-act {
+            display: flex;
+            gap: 5px
+        }
+
+        .ico-btn {
+            width: 27px;
+            height: 27px;
+            border-radius: 7px;
+            border: 1px solid var(--bdr2);
+            background: var(--card);
+            color: var(--sub);
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .13s
+        }
+
+        .ico-btn:hover {
+            border-color: var(--acc);
+            color: var(--acc)
+        }
+
+        .empty {
+            text-align: center;
+            padding: 34px 20px;
+            color: var(--sub)
+        }
+
+        .empty .ei {
+            font-size: 42px;
+            margin-bottom: 9px;
+            opacity: .5
+        }
+
+        /* modal */
+        .modal-bg {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .8);
+            z-index: 200;
+            align-items: center;
+            justify-content: center
+        }
+
+        .modal-bg.show {
+            display: flex
+        }
+
+        .modal {
+            background: var(--card);
+            border: 1px solid var(--bdr2);
+            border-radius: 16px;
+            padding: 28px;
+            width: 360px;
+            max-width: 90vw
+        }
+
+        .modal h3 {
+            font-family: 'Fraunces', serif;
+            font-size: 21px;
+            margin-bottom: 4px
+        }
+
+        .modal p {
+            font-size: 13px;
+            color: var(--sub);
+            margin-bottom: 16px
+        }
+
+        .modal-btns {
+            display: flex;
+            gap: 9px;
+            justify-content: flex-end;
+            margin-top: 15px
+        }
+
+        /* ── RIGHT PREVIEW ── */
+        .rp {
+            background: #1e1e28;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden
+        }
+
+        .prev-bar {
+            background: var(--surf);
+            border-bottom: 1px solid var(--bdr);
+            padding: 9px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0
+        }
+
+        .prev-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--sub);
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            flex: 1
+        }
+
+        .live {
+            background: rgba(16, 185, 129, .14);
+            color: var(--grn);
+            font-size: 10px;
+            font-weight: 600;
+            padding: 3px 9px;
+            border-radius: 20px;
+            border: 1px solid rgba(16, 185, 129, .22);
+            display: flex;
+            align-items: center;
+            gap: 5px
+        }
+
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--grn);
+            animation: pulse 1.5s infinite
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .3
+            }
+        }
+
+        .zbtns {
+            display: flex;
+            gap: 3px
+        }
+
+        .zbtn {
+            width: 27px;
+            height: 27px;
+            border-radius: 7px;
+            border: 1px solid var(--bdr2);
+            background: var(--card);
+            color: var(--sub);
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .12s
+        }
+
+        .zbtn:hover {
+            border-color: var(--acc);
+            color: var(--acc)
+        }
+
+        .zval {
+            font-size: 11px;
+            color: var(--sub);
+            padding: 0 5px;
+            min-width: 34px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .prev-scroll {
+            flex: 1;
+            overflow: auto;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 20px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--bdr2) transparent
+        }
+
+        /* CV preview wrapper — A4 proportions */
+        .cv-wrap {
+            width: 600px;
+            min-height: 848px;
+            background: #fff;
+            box-shadow: 0 10px 48px rgba(0, 0, 0, .6);
+            border-radius: 3px;
+            overflow: hidden;
+            transform-origin: top center;
+            transition: transform .2s
+        }
+
+        /* ── CV PREVIEW INTERNALS ── */
+        /* sidebar layout */
+        .cv-sb-layout {
+            display: flex;
+            min-height: 848px;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 9px
+        }
+
+        .cv-sb {
+            flex-shrink: 0;
+            width: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center
+        }
+
+        /* WHITE header zone: foto + nombre + titulo */
+        .cv-sb-header {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px 12px 12px
+        }
+
+        .cv-sb .av-wrap {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 3px solid;
+            margin-bottom: 9px;
+            background: #fff
+        }
+
+        .cv-sb .av-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block
+        }
+
+        .cv-sb .av-init {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            font-family: 'Fraunces', serif;
+            margin-bottom: 9px;
+            box-shadow: 0 0 0 3px #fff
+        }
+
+        .cv-sb-name {
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff;
+            text-align: center;
+            line-height: 1.3;
+            margin-bottom: 2px
+        }
+
+        .cv-sb-title {
+            font-size: 8px;
+            text-align: center;
+            margin-bottom: 0
+        }
+
+        /* Dark body */
+        .cv-sb-body {
+            width: 100%;
+            flex: 1;
+            padding: 10px 0 20px
+        }
+
+        .cv-sb-div {
+            height: .5px;
+            width: calc(100% - 24px);
+            margin: 0 12px 10px;
+            opacity: .2;
+            background: #fff
+        }
+
+        .cv-sb-sec {
+            width: 100%;
+            padding: 0 14px;
+            margin-bottom: 2px
+        }
+
+        .cv-sb-sec-title {
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 3px
+        }
+
+        .cv-sb-sec-line {
+            height: .5px;
+            margin-bottom: 8px;
+            opacity: .2;
+            background: #fff
+        }
+
+        .cv-sb-contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            margin-bottom: 4px;
+            font-size: 7.5px;
+            color: rgba(255, 255, 255, .88);
+            line-height: 1.4
+        }
+
+        .cv-sb-contact-ic {
+            flex-shrink: 0;
+            font-size: 8px;
+            margin-top: .5px
+        }
+
+        .cv-sb-skill {
+            margin-bottom: 10px
+        }
+
+        .cv-sb-skill-name {
+            font-size: 8px;
+            color: rgba(255, 255, 255, .9);
+            margin-bottom: 3px
+        }
+
+        .cv-sb-bars {
+            display: flex;
+            gap: 2px
+        }
+
+        .cv-sb-bar {
+            height: 5px;
+            border-radius: 2px;
+            flex: 1
+        }
+
+        .cv-sb-lang {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 7px;
+            font-size: 8.5px;
+            color: rgba(255, 255, 255, .9)
+        }
+
+        .cv-sb-lang-tag {
+            font-size: 7px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #fff
+        }
+
+        .cv-sb.light .cv-sb-sec-line {
+            background: #aaa
+        }
+
+        .cv-sb.light .cv-sb-div {
+            background: #aaa
+        }
+
+        .cv-sb.light .cv-sb-contact-item {
+            color: #333
+        }
+
+        .cv-sb.light .cv-sb-skill-name {
+            color: #333
+        }
+
+        .cv-sb.light .cv-sb-lang {
+            color: #333
+        }
+
+        /* main body */
+        .cv-main {
+            flex: 1;
+            padding: 20px 20px 20px 18px;
+            background: #fff
+        }
+
+        .cv-main-name {
+            font-size: 22px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 2px
+        }
+
+        .cv-main-title {
+            font-size: 11px;
+            margin-bottom: 8px
+        }
+
+        .cv-main-rule {
+            height: 1.5px;
+            margin-bottom: 14px
+        }
+
+        .cv-sec {
+            margin-bottom: 14px
+        }
+
+        .cv-sec-title {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            margin-bottom: 3px
+        }
+
+        .cv-sec-line {
+            height: 1px;
+            margin-bottom: 8px
+        }
+
+        .cv-summary {
+            font-size: 8.5px;
+            color: #444;
+            line-height: 1.55
+        }
+
+        .cv-exp {
+            margin-bottom: 9px
+        }
+
+        .cv-exp-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline
+        }
+
+        .cv-exp-pos {
+            font-size: 10.5px;
+            font-weight: 700
+        }
+
+        .cv-exp-date {
+            font-size: 7.5px;
+            color: #999
+        }
+
+        .cv-exp-co {
+            font-size: 8.5px;
+            font-style: italic;
+            margin: 1px 0 3px
+        }
+
+        .cv-exp-desc {
+            font-size: 8px;
+            color: #555;
+            line-height: 1.45
+        }
+
+        .cv-course-item {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            margin-bottom: 5px;
+            font-size: 8.5px
+        }
+
+        .cv-course-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 1px
+        }
+
+        .cv-course-yr {
+            font-size: 7.5px;
+            color: #999;
+            margin-left: auto;
+            white-space: nowrap
+        }
+
+        .cv-rec {
+            padding: 6px 8px;
+            border-radius: 5px;
+            border-left: 3px solid;
+            margin-bottom: 7px;
+            background: #f9f9f9
+        }
+
+        .cv-rec-name {
+            font-size: 9.5px;
+            font-weight: 700;
+            margin-bottom: 1px
+        }
+
+        .cv-rec-role {
+            font-size: 8px;
+            font-style: italic;
+            margin-bottom: 3px
+        }
+
+        .cv-rec-text {
+            font-size: 8px;
+            color: #666;
+            line-height: 1.45
+        }
+
+        /* light sidebar (minimalista/pastel) */
+        .cv-sb.light .cv-sb-name {
+            color: #222
+        }
+
+        .cv-sb.light .cv-sb-sec-line {
+            background: #aaa
+        }
+
+        .cv-sb.light .cv-sb-div {
+            background: #aaa
+        }
+
+        .cv-sb.light .cv-sb-contact-item {
+            color: #333
+        }
+
+        .cv-sb.light .cv-sb-skill-name {
+            color: #333
+        }
+
+        .cv-sb.light .cv-sb-lang {
+            color: #333
+        }
+
+        /* overlay / toast */
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .82);
+            z-index: 300;
+            align-items: center;
+            justify-content: center
+        }
+
+        .overlay.show {
+            display: flex
+        }
+
+        .ov-card {
+            background: var(--card);
+            border: 1px solid var(--bdr2);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            max-width: 300px
+        }
+
+        .spin {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid var(--bdr2);
+            border-top-color: var(--acc);
+            animation: spin .7s linear infinite;
+            margin: 0 auto 16px
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        .ov-card h3 {
+            font-family: 'Fraunces', serif;
+            font-size: 21px;
+            margin-bottom: 5px
+        }
+
+        .ov-card p {
+            font-size: 12px;
+            color: var(--sub)
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 22px;
+            right: 22px;
+            padding: 11px 17px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: all .27s;
+            z-index: 400;
+            display: flex;
+            align-items: center;
+            gap: 7px
+        }
+
+        .toast.ok {
+            background: var(--grn);
+            color: #fff
+        }
+
+        .toast.err {
+            background: var(--acc);
+            color: #fff
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0)
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+        <span class="logo">CV<em>Wizard</em><sup>Pro</sup></span>
+        <div class="sep"></div>
+        <select id="lang-sel" class="btn btn-ghost" onchange="changeLang(this.value)"
+            style="margin-right:10px; border:none; padding-right:20px; appearance:none;">
+            <option value="es">🇪🇸 ES</option>
+            <option value="en">🇺🇸 EN</option>
+        </select>
+        <button class="btn btn-ghost" onclick="showPane('csv')">📂 CSV</button>
+        <button class="btn btn-ghost" onclick="openSaveModal()">💾 Guardar</button>
+        <button class="btn btn-ghost" onclick="showPane('profiles')">📁 Perfiles</button>
+        <button class="btn btn-red" onclick="genPDF()">⬇ Descargar PDF</button>
+    </header>
+
+    <div class="ws">
+        <!-- LEFT -->
+        <div class="lp">
+            <div class="tabs">
+                <div class="tab on" id="tab-edit" onclick="showPane('edit')">✏️ Editor</div>
+                <div class="tab" id="tab-csv" onclick="showPane('csv')">📂 CSV</div>
+                <div class="tab" id="tab-pro" onclick="showPane('profiles')">📁 Perfiles</div>
+            </div>
+
+            <!-- EDIT PANE -->
+            <div class="pane" id="pane-edit">
+                <!-- Template picker -->
+                <div style="margin-bottom:12px">
+                    <div
+                        style="font-size:10px;font-weight:700;color:var(--sub);letter-spacing:1px;text-transform:uppercase;margin-bottom:9px">
+                        Plantilla (10 diseños)</div>
+                    <div class="tgrid" id="tgrid"></div>
+                </div>
+                <div class="divider"></div>
+                <div class="snav">
+                    <div class="sbtn on" onclick="goSec(0,this)">
+                        <div class="ic">👤</div>Datos Personales<span class="chk">✓</span>
+                    </div>
+                    <div class="sbtn" onclick="goSec(1,this)">
+                        <div class="ic">📝</div>Perfil Profesional<span class="chk">✓</span>
+                    </div>
+                    <div class="sbtn" onclick="goSec(2,this)">
+                        <div class="ic">💼</div>Experiencia<span class="badge" id="b-exp">0</span><span
+                            class="chk">✓</span>
+                    </div>
+                    <div class="sbtn" onclick="goSec(3,this)">
+                        <div class="ic">🎓</div>Formación<span class="badge" id="b-edu">0</span><span
+                            class="chk">✓</span>
+                    </div>
+                    <div class="sbtn" onclick="goSec(4,this)">
+                        <div class="ic">⚡</div>Competencias<span class="badge" id="b-sk">0</span><span
+                            class="chk">✓</span>
+                    </div>
+                    <div class="sbtn" onclick="goSec(5,this)">
+                        <div class="ic">🌐</div>Idiomas<span class="badge" id="b-lg">0</span><span class="chk">✓</span>
+                    </div>
+                    <div class="sbtn" onclick="goSec(6,this)">
+                        <div class="ic">📚</div>Cursos<span class="badge" id="b-co">0</span><span class="chk">✓</span>
+                    </div>
+                    <div class="sbtn" onclick="goSec(7,this)">
+                        <div class="ic">⭐</div>Recomendaciones<span class="badge" id="b-rec">0</span><span
+                            class="chk">✓</span>
+                    </div>
+                    <div class="sbtn" onclick="goSec(8,this)">
+                        <div class="ic">🎯</div>Intereses<span class="chk">✓</span>
+                    </div>
+                </div>
+                <div class="divider"></div>
+
+                <!-- §0 Datos personales -->
+                <div class="fp on" id="fp-0">
+                    <div class="ft">Datos Personales</div>
+                    <div class="fd">Completa todos tus datos de contacto e identificación.</div>
+
+                    <!-- Foto -->
+                    <div class="photo-box">
+                        <div class="photo-circle" id="ph-circle" onclick="document.getElementById('ph-inp').click()"
+                            title="Subir foto">
+                            <span id="ph-placeholder" style="font-size:24px">📷</span>
+                            <img id="ph-img" alt="foto">
+                        </div>
+                        <div>
+                            <div style="font-size:13px;font-weight:600;margin-bottom:2px">Foto de perfil</div>
+                            <div style="font-size:11px;color:var(--sub);margin-bottom:8px">JPG o PNG · fondo claro
+                                recomendado</div>
+                            <div style="display:flex;gap:6px;flex-wrap:wrap">
+                                <button class="btn btn-ghost" style="height:27px;font-size:11px;padding:0 10px"
+                                    onclick="document.getElementById('ph-inp').click()">📁 Subir</button>
+                                <button class="btn btn-ghost" id="ph-rmbg-btn"
+                                    style="height:27px;font-size:11px;padding:0 10px;display:none;color:var(--grn)"
+                                    onclick="removeBg()">✨ Fondo blanco</button>
+                                <button class="btn btn-ghost" id="ph-clear-btn"
+                                    style="height:27px;font-size:11px;padding:0 10px;display:none;color:var(--acc)"
+                                    onclick="clearPhoto()">✕ Quitar</button>
+                            </div>
+                            <div id="ph-status" style="font-size:10px;color:var(--sub);margin-top:4px;display:none">
+                            </div>
+                        </div>
+                    </div>
+                    <input type="file" id="ph-inp" accept="image/*" style="display:none" onchange="loadPhoto(this)">
+
+                    <div class="fg"><label>Nombre completo *</label><input id="f-name"
+                            placeholder="Diego Alonzo Ochochoque Cconislla" oninput="upd()"></div>
+                    <div class="fg"><label>Cargo / Título profesional</label><input id="f-title"
+                            placeholder="Analista Programador | Dev Full Stack" oninput="upd()"></div>
+                    <div class="r2">
+                        <div class="fg"><label>DNI / Doc. identidad</label><input id="f-dni" placeholder="71234567"
+                                oninput="upd()"></div>
+                        <div class="fg"><label>Fecha de nacimiento</label><input id="f-birth" placeholder="dd/mm/aaaa"
+                                oninput="upd()"></div>
+                    </div>
+                    <div class="r2">
+                        <div class="fg"><label>Nacionalidad</label><input id="f-nat" placeholder="Peruana"
+                                oninput="upd()"></div>
+                        <div class="fg"><label>Género</label>
+                            <select id="f-gen" onchange="upd()">
+                                <option value="">— No mostrar —</option>
+                                <option>Masculino</option>
+                                <option>Femenino</option>
+                                <option>Prefiero no decir</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="fg"><label>Dirección</label><input id="f-addr"
+                            placeholder="Calle Cuba 180, La Molina, Lima" oninput="upd()"></div>
+                    <div class="r2">
+                        <div class="fg"><label>Email</label><input id="f-email" placeholder="diego@gmail.com"
+                                oninput="upd()"></div>
+                        <div class="fg"><label>Teléfono</label><input id="f-phone" placeholder="+51 913 752 448"
+                                oninput="upd()"></div>
+                    </div>
+                    <div class="fg"><label>LinkedIn</label><input id="f-li" placeholder="linkedin.com/in/tu-perfil"
+                            oninput="upd()"></div>
+                    <div class="r2">
+                        <div class="fg"><label>GitHub / Portfolio</label><input id="f-web"
+                                placeholder="github.com/usuario" oninput="upd()"></div>
+                        <div class="fg"><label>Ciudad / Ubicación</label><input id="f-loc" placeholder="La Molina, Lima"
+                                oninput="upd()"></div>
+                    </div>
+                </div>
+
+                <!-- §1 Perfil -->
+                <div class="fp" id="fp-1">
+                    <div class="ft">Perfil Profesional</div>
+                    <div class="fd">3–5 líneas que resuman tu experiencia y lo que buscas.</div>
+                    <div class="fg"><label>Resumen</label><textarea id="f-summary" rows="8"
+                            placeholder="Egresado de Ingeniería de Sistemas con experiencia en…"
+                            oninput="upd()"></textarea></div>
+                </div>
+
+                <!-- §2 Experiencia -->
+                <div class="fp" id="fp-2">
+                    <div class="ft">Experiencia Laboral</div>
+                    <div class="fd">Empieza por el puesto más reciente.</div>
+                    <div id="exp-list"></div>
+                    <button class="add-btn" onclick="addExp()">＋ Añadir experiencia</button>
+                </div>
+
+                <!-- §3 Formación -->
+                <div class="fp" id="fp-3">
+                    <div class="ft">Formación Académica</div>
+                    <div class="fd">Universidad, instituto, máster u otra titulación oficial.</div>
+                    <div id="edu-list"></div>
+                    <button class="add-btn" onclick="addEdu()">＋ Añadir formación</button>
+                </div>
+
+                <!-- §4 Competencias -->
+                <div class="fp" id="fp-4">
+                    <div class="ft">Competencias</div>
+                    <div class="fd">Habilidades técnicas y blandas. El nivel (1–5 puntos) indica tu dominio.</div>
+                    <div id="sk-list"></div>
+                    <button class="add-btn" onclick="addSk()">＋ Añadir competencia</button>
+                </div>
+
+                <!-- §5 Idiomas -->
+                <div class="fp" id="fp-5">
+                    <div class="ft">Idiomas</div>
+                    <div class="fd">Indica tu nivel general usando el Marco Europeo (A1–C2) o "Nativo".</div>
+                    <div id="lg-list"></div>
+                    <button class="add-btn" onclick="addLg()">＋ Añadir idioma</button>
+                </div>
+
+                <!-- §6 Cursos -->
+                <div class="fp" id="fp-6">
+                    <div class="ft">Cursos y Certificaciones</div>
+                    <div class="fd">Bootcamps, certificaciones, formación online relevante.</div>
+                    <div id="co-list"></div>
+                    <button class="add-btn" onclick="addCo()">＋ Añadir curso</button>
+                </div>
+
+                <!-- §7 Recomendaciones -->
+                <div class="fp" id="fp-7">
+                    <div class="ft">Recomendaciones</div>
+                    <div class="fd">Testimonios de jefes, clientes o colegas que avalen tu trabajo.</div>
+                    <div id="rec-list"></div>
+                    <button class="add-btn" onclick="addRec()">＋ Añadir recomendación</button>
+                </div>
+
+                <!-- §8 Intereses -->
+                <div class="fp" id="fp-8">
+                    <div class="ft">Intereses y Hobbies</div>
+                    <div class="fd">Un toque personal que te hace memorable.</div>
+                    <div class="fg"><label>Aficiones</label><textarea id="f-hobbies" rows="4"
+                            placeholder="Cloud computing, fotografía, open source…" oninput="upd()"></textarea></div>
+                </div>
+            </div><!-- /pane-edit -->
+
+            <!-- CSV PANE -->
+            <div class="pane pane-hidden" id="pane-csv">
+                <div class="ft" style="margin-bottom:4px">Importar desde CSV</div>
+                <div class="fd">Carga tus datos desde una hoja de cálculo exportada como CSV.</div>
+                <div class="csv-zone" id="csv-drop" onclick="document.getElementById('csv-inp').click()"
+                    ondragover="csvDrag(event,true)" ondragleave="csvDrag(event,false)" ondrop="csvDrop(event)">
+                    <div class="ci">📊</div>
+                    <p><strong>Clic o arrastra tu CSV aquí</strong><br>Asegúrate de usar el formato de la plantilla</p>
+                </div>
+                <input type="file" id="csv-inp" accept=".csv" style="display:none" onchange="csvLoad(this.files[0])">
+                <button class="btn btn-grn" style="width:100%;margin-bottom:16px"
+                    onclick="window.open('/csv-template')">⬇ Descargar plantilla CSV</button>
+                <div style="background:var(--card2);border:1px solid var(--bdr2);border-radius:var(--R2);padding:13px">
+                    <div style="font-size:12px;font-weight:600;margin-bottom:8px">Formato (columnas)</div>
+                    <div style="font-size:11px;color:var(--sub);line-height:1.8;font-family:monospace">
+                        personal,Nombre,Cargo,Email,Tel,Ciudad,LinkedIn,Web,DNI,FechaNac,Nacionalidad,Dirección,Género<br>
+                        summary,Texto<br>
+                        experience,Cargo,Empresa,Inicio,Fin,Descripción<br>
+                        education,Título,Institución,Inicio,Fin<br>
+                        skill,Nombre,Nivel(1-5)<br>
+                        language,Nombre,Nivel(A1-Nativo)<br>
+                        course,Nombre,Institución,Año<br>
+                        recommendation,Nombre,Cargo,Empresa,Texto<br>
+                        hobbies,Texto<br>
+                        template,clasica_azul
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROFILES PANE -->
+            <div class="pane pane-hidden" id="pane-profiles">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+                    <div style="font-size:14px;font-weight:600">Mis CVs guardados</div>
+                    <button class="btn btn-ghost" style="height:28px;font-size:11px" onclick="openSaveModal()">＋
+                        Nuevo</button>
+                </div>
+                <div id="pro-list">
+                    <div class="empty">
+                        <div class="ei">📄</div>
+                        <p>Sin perfiles guardados.<br>Completa tu CV y pulsa <strong>Guardar</strong>.</p>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /left -->
+
+        <!-- RIGHT PREVIEW -->
+        <div class="rp">
+            <div class="prev-bar">
+                <span class="prev-title">Vista previa en tiempo real</span>
+                <div class="live">
+                    <div class="live-dot"></div>En vivo
+                </div>
+                <div style="flex:1"></div>
+                <div class="zbtns">
+                    <button class="zbtn" onclick="zoom(-0.1)">−</button>
+                    <span class="zval" id="zval">75%</span>
+                    <button class="zbtn" onclick="zoom(0.1)">+</button>
+                    <button class="zbtn" onclick="zoom(0)">⊞</button>
+                </div>
+            </div>
+            <div class="prev-scroll">
+                <div class="cv-wrap" id="cv-wrap"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SAVE MODAL -->
+    <div class="modal-bg" id="save-modal">
+        <div class="modal">
+            <h3>Guardar perfil</h3>
+            <p>Dale un nombre para identificarlo en tu lista.</p>
+            <div class="fg"><label>Nombre del perfil</label><input id="pro-name-inp"
+                    placeholder="Ej. CV en inglés, CV para startups…" maxlength="50"></div>
+            <div class="modal-btns">
+                <button class="btn btn-ghost" onclick="closeSaveModal()">Cancelar</button>
+                <button class="btn btn-pur" onclick="saveProfile()">💾 Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOADING -->
+    <div class="overlay" id="overlay">
+        <div class="ov-card">
+            <div class="spin"></div>
+            <h3>Generando PDF…</h3>
+            <p>Diseñando tu currículum.</p>
+        </div>
+    </div>
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ═══════════════════════════════ TEMPLATES ═══════════════════════════════════
+        const TPLS = [
+            { id: 'clasica_azul', label: 'Clásica', sb: '#2c3e50', acc: '#2980b9', light: false },
+            { id: 'moderna_roja', label: 'Moderna', sb: '#1a1a2e', acc: '#e94560', light: false },
+            { id: 'elegante_oro', label: 'Elegante', sb: '#1b1b1b', acc: '#c9a84c', light: false },
+            { id: 'oceano', label: 'Océano', sb: '#0d3b5e', acc: '#00b4d8', light: false },
+            { id: 'bosque', label: 'Bosque', sb: '#1b4332', acc: '#74c69d', light: false },
+            { id: 'carbon', label: 'Carbón', sb: '#1c1c1c', acc: '#ff6b35', light: false },
+            { id: 'aurora', label: 'Aurora', sb: '#2b2d42', acc: '#ef233c', light: false },
+            { id: 'violeta', label: 'Violeta', sb: '#4a235a', acc: '#c77dff', light: false },
+            { id: 'minimalista', label: 'Minimal', sb: '#f5f5f5', acc: '#222222', light: true },
+            { id: 'pastel_rosa', label: 'Pastel', sb: '#fde8ec', acc: '#c9485b', light: true },
+        ];
+
+        function buildTplGrid() {
+            document.getElementById('tgrid').innerHTML = TPLS.map(t => {
+                const inner = t.light
+                    ? `<div style="height:25%;background:${t.acc}"></div><div style="padding:5px"><div style="height:3px;border-radius:1px;background:${t.acc};margin-bottom:3px;width:70%"></div><div style="height:3px;border-radius:1px;background:#ccc;margin-bottom:3px"></div></div>`
+                    : `<div style="display:flex;height:100%"><div style="width:38%;background:${t.sb}"></div><div style="flex:1"><div style="background:${t.sb};height:22%;border-bottom:3px solid ${t.acc}"></div></div></div>`;
+                return `<div class="tc${t.id === 'clasica_azul' ? ' on' : ''}" onclick="selTpl('${t.id}',this)" style="background:${t.light ? '#fff' : '#fff'}">
+      <div class="tmini" style="background:${t.light ? t.sb : '#fff'}">${inner}</div>
+      <div class="tlabel">${t.label}</div>
+    </div>`;
+            }).join('');
+        }
+        buildTplGrid();
+
+        // ═══════════════════════════════ STATE ═══════════════════════════════════════
+        let CUR_TPL = 'clasica_azul';
+        let zv = 0.75;
+        let expN = 0, eduN = 0, skN = 0, lgN = 0, coN = 0, recN = 0;
+        let curProfId = null;
+        let photoB64 = null;
+        let deb = null;
+
+        // ═══════════════════════════════ TRANSLATIONS ════════════════════════════════
+        let CURRENT_LANG = 'es';
+        const UI_TEXT_MAP = {
+            "📂 CSV": { en: "📂 CSV", es: "📂 CSV" },
+            "💾 Guardar": { en: "💾 Save", es: "💾 Guardar" },
+            "📁 Perfiles": { en: "📁 Profiles", es: "📁 Perfiles" },
+            "⬇ Descargar PDF": { en: "⬇ Download PDF", es: "⬇ Descargar PDF" },
+            "✏️ Editor": { en: "✏️ Editor", es: "✏️ Editor" },
+            "Plantilla (10 diseños)": { en: "Template (10 designs)", es: "Plantilla (10 diseños)" },
+            "Datos Personales": { en: "Personal Details", es: "Datos Personales" },
+            "Perfil Profesional": { en: "Professional Profile", es: "Perfil Profesional" },
+            "Experiencia Laboral": { en: "Work Experience", es: "Experiencia Laboral" },
+            "Experiencia": { en: "Experience", es: "Experiencia" },
+            "Formación Académica": { en: "Academic Education", es: "Formación Académica" },
+            "Formación": { en: "Education", es: "Formación" },
+            "Competencias": { en: "Skills", es: "Competencias" },
+            "Idiomas": { en: "Languages", es: "Idiomas" },
+            "Cursos y Certificaciones": { en: "Courses & Certifications", es: "Cursos y Certificaciones" },
+            "Cursos": { en: "Courses", es: "Cursos" },
+            "Recomendaciones": { en: "Recommendations", es: "Recomendaciones" },
+            "Intereses y Hobbies": { en: "Interests & Hobbies", es: "Intereses y Hobbies" },
+            "Intereses": { en: "Interests", es: "Intereses" },
+            "Perfil": { en: "Profile", es: "Perfil" },
+            "Presente": { en: "Present", es: "Presente" },
+            "Completa todos tus datos de contacto e identificación.": { en: "Fill out all your contact and identification details.", es: "Completa todos tus datos de contacto e identificación." },
+            "Foto de perfil": { en: "Profile Photo", es: "Foto de perfil" },
+            "Subir foto": { en: "Upload", es: "Subir foto" },
+            "📁 Subir": { en: "📁 Upload", es: "📁 Subir" },
+            "✨ Fondo blanco": { en: "✨ White BG", es: "✨ Fondo blanco" },
+            "✕ Quitar": { en: "✕ Remove", es: "✕ Quitar" },
+            "Nombre completo *": { en: "Full Name *", es: "Nombre completo *" },
+            "Cargo / Título profesional": { en: "Job Title", es: "Cargo / Título profesional" },
+            "DNI / Doc. identidad": { en: "ID Number", es: "DNI / Doc. identidad" },
+            "Fecha de nacimiento": { en: "Birth Date", es: "Fecha de nacimiento" },
+            "Nacionalidad": { en: "Nationality", es: "Nacionalidad" },
+            "Género": { en: "Gender", es: "Género" },
+            "— No mostrar —": { en: "- Do not show -", es: "— No mostrar —" },
+            "Masculino": { en: "Male", es: "Masculino" },
+            "Femenino": { en: "Female", es: "Femenino" },
+            "Prefiero no decir": { en: "Prefer not to say", es: "Prefiero no decir" },
+            "Dirección": { en: "Address", es: "Dirección" },
+            "Teléfono": { en: "Phone", es: "Teléfono" },
+            "Ciudad / Ubicación": { en: "City / Location", es: "Ciudad / Ubicación" },
+            "3–5 líneas que resuman tu experiencia y lo que buscas.": { en: "3–5 lines summarizing your experience and goals.", es: "3–5 líneas que resuman tu experiencia y lo que buscas." },
+            "Resumen": { en: "Summary", es: "Resumen" },
+            "Empieza por el puesto más reciente.": { en: "Start with the most recent position.", es: "Empieza por el puesto más reciente." },
+            "＋ Añadir experiencia": { en: "＋ Add Experience", es: "＋ Añadir experiencia" },
+            "Cargo *": { en: "Position *", es: "Cargo *" },
+            "Cargo": { en: "Position", es: "Cargo" },
+            "Empresa *": { en: "Company *", es: "Empresa *" },
+            "Empresa": { en: "Company", es: "Empresa" },
+            "Inicio": { en: "Start Date", es: "Inicio" },
+            "Fin": { en: "End Date", es: "Fin" },
+            "Descripción": { en: "Description", es: "Descripción" },
+            "Universidad, instituto, máster u otra titulación oficial.": { en: "University, institute, master or other official degree.", es: "Universidad, instituto, máster u otra titulación oficial." },
+            "＋ Añadir formación": { en: "＋ Add Education", es: "＋ Añadir formación" },
+            "Titulación": { en: "Degree", es: "Titulación" },
+            "Institución": { en: "Institution", es: "Institución" },
+            "Habilidades técnicas y blandas. El nivel (1–5 puntos) indica tu dominio.": { en: "Technical and soft skills. Level (1-5) indicates proficiency.", es: "Habilidades técnicas y blandas. El nivel (1–5 puntos) indica tu dominio." },
+            "＋ Añadir competencia": { en: "＋ Add Skill", es: "＋ Añadir competencia" },
+            "Indica tu nivel general usando el Marco Europeo (A1–C2) o \"Nativo\".": { en: "Indicate your general level using the CEFR framework (A1-C2) or Native.", es: "Indica tu nivel general usando el Marco Europeo (A1–C2) o \"Nativo\"." },
+            "＋ Añadir idioma": { en: "＋ Add Language", es: "＋ Añadir idioma" },
+            "Nativo": { en: "Native", es: "Nativo" },
+            "C2 – Maestría": { en: "C2 – Mastery", es: "C2 – Maestría" },
+            "C1 – Avanzado": { en: "C1 – Advanced", es: "C1 – Avanzado" },
+            "B2 – Intermedio alto": { en: "B2 – Upper Intermediate", es: "B2 – Intermedio alto" },
+            "B1 – Intermedio": { en: "B1 – Intermediate", es: "B1 – Intermedio" },
+            "A2 – Elemental": { en: "A2 – Elementary", es: "A2 – Elemental" },
+            "A1 – Básico": { en: "A1 – Basic", es: "A1 – Básico" },
+            "Bootcamps, certificaciones, formación online relevante.": { en: "Bootcamps, certifications, relevant online training.", es: "Bootcamps, certificaciones, formación online relevante." },
+            "＋ Añadir curso": { en: "＋ Add Course", es: "＋ Añadir curso" },
+            "Nombre": { en: "Name", es: "Nombre" },
+            "Año": { en: "Year", es: "Año" },
+            "Testimonios de jefes, clientes o colegas que avalen tu trabajo.": { en: "Testimonials that endorse your work.", es: "Testimonios de jefes, clientes o colegas que avalen tu trabajo." },
+            "＋ Añadir recomendación": { en: "＋ Add Recommendation", es: "＋ Añadir recomendación" },
+            "Nombre *": { en: "Name *", es: "Nombre *" },
+            "Texto": { en: "Text", es: "Texto" },
+            "Un toque personal que te hace memorable.": { en: "A personal touch that makes you memorable.", es: "Un toque personal que te hace memorable." },
+            "Aficiones": { en: "Hobbies", es: "Aficiones" },
+            "Importar desde CSV": { en: "Import from CSV", es: "Importar desde CSV" },
+            "Carga tus datos desde una hoja de cálculo exportada como CSV.": { en: "Load your data from an exported CSV sheet.", es: "Carga tus datos desde una hoja de cálculo exportada como CSV." },
+            "Clic o arrastra tu CSV aquí": { en: "Click or drag your CSV here", es: "Clic o arrastra tu CSV aquí" },
+            "Asegúrate de usar el formato de la plantilla": { en: "Ensure you use the template format", es: "Asegúrate de usar el formato de la plantilla" },
+            "⬇ Descargar plantilla CSV": { en: "⬇ Download CSV template", es: "⬇ Descargar plantilla CSV" },
+            "Formato (columnas)": { en: "Format (columns)", es: "Formato (columnas)" },
+            "Mis CVs guardados": { en: "My saved CVs", es: "Mis CVs guardados" },
+            "＋ Nuevo": { en: "＋ New", es: "＋ Nuevo" },
+            "Sin perfiles guardados.": { en: "No saved profiles.", es: "Sin perfiles guardados." },
+            "Vista previa en tiempo real": { en: "Real-time preview", es: "Vista previa en tiempo real" },
+            "En vivo": { en: "Live", es: "En vivo" },
+            "Guardar perfil": { en: "Save profile", es: "Guardar perfil" },
+            "Dale un nombre para identificarlo en tu lista.": { en: "Give it a name to identify it.", es: "Dale un nombre para identificarlo en tu lista." },
+            "Nombre del perfil": { en: "Profile name", es: "Nombre del perfil" },
+            "Cancelar": { en: "Cancel", es: "Cancelar" },
+            "Generando PDF…": { en: "Generating PDF…", es: "Generando PDF…" },
+            "Diseñando tu currículum.": { en: "Designing your resume.", es: "Diseñando tu currículum." },
+            "Tu Nombre": { en: "Your Name", es: "Tu Nombre" },
+            "Completa tu CV y pulsa": { en: "Complete your CV and click", es: "Completa tu CV y pulsa" }
+        };
+
+        function t(key) {
+            if (!UI_TEXT_MAP[key]) return key;
+            return UI_TEXT_MAP[key][CURRENT_LANG] || key;
+        }
+
+        function saveOriginalText(el) {
+            if (el.childNodes) {
+                el.childNodes.forEach(child => {
+                    if (child.nodeType === 3 && child.nodeValue.trim() !== '') {
+                        child.__o_text = child.nodeValue.trim();
+                    } else if (child.nodeType === 1) {
+                        saveOriginalText(child);
+                    }
+                });
+            }
+            if (el.placeholder && el.placeholder.trim() !== '') el.__o_ph = el.placeholder;
+        }
+
+        function applyTrans(el) {
+            if (el.childNodes) {
+                el.childNodes.forEach(child => {
+                    if (child.nodeType === 3 && child.__o_text) {
+                        if (UI_TEXT_MAP[child.__o_text] && UI_TEXT_MAP[child.__o_text][CURRENT_LANG]) {
+                            const val = UI_TEXT_MAP[child.__o_text][CURRENT_LANG];
+                            // Replace exactly the trimmed substring to preserve surrounding whitespaces
+                            child.nodeValue = child.nodeValue.replace(child.nodeValue.trim(), val);
+                        }
+                    } else if (child.nodeType === 1) {
+                        applyTrans(child);
+                    }
+                });
+            }
+            if (el.__o_ph && UI_TEXT_MAP[el.__o_ph] && UI_TEXT_MAP[el.__o_ph][CURRENT_LANG]) {
+                el.placeholder = UI_TEXT_MAP[el.__o_ph][CURRENT_LANG];
+            }
+            if (el.tagName === 'OPTION' && el.__o_text && UI_TEXT_MAP[el.__o_text] && UI_TEXT_MAP[el.__o_text][CURRENT_LANG]) {
+                // Update select option text manually if needed though node traversal usually catches it
+            }
+        }
+
+        function reTrans(el) {
+            if (!el) return;
+            saveOriginalText(el);
+            applyTrans(el);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            saveOriginalText(document.body);
+            translateUI();
+        });
+
+        function translateUI() {
+            applyTrans(document.body);
+        }
+
+        function changeLang(lang) {
+            CURRENT_LANG = lang;
+            translateUI();
+            upd();
+            // Also explicitly fix dynamic titles like "Experiencia 1" -> "Experience 1"
+            document.querySelectorAll('.ic-title').forEach(e => {
+                if (e.__o_text) {
+                    let p = e.__o_text.split(' ');
+                    if (p.length > 1 && UI_TEXT_MAP[p[0]]) {
+                        let trans = UI_TEXT_MAP[p[0]][CURRENT_LANG] || p[0];
+                        e.textContent = trans + ' ' + p[1];
+                    }
+                }
+            });
+        }
+
+
+        // ═══════════════════════════════ PANES / TABS ════════════════════════════════
+        function showPane(name) {
+            ['edit', 'csv', 'profiles'].forEach(n => {
+                document.getElementById('pane-' + n + (n === 'profiles' ? '' : '')).classList.toggle('pane-hidden', n !== name);
+                const tab = document.getElementById('tab-' + (n === 'edit' ? 'edit' : n === 'csv' ? 'csv' : 'pro'));
+                if (tab) tab.classList.toggle('on', n === name);
+            });
+            // fix IDs
+            document.getElementById('pane-edit').classList.toggle('pane-hidden', name !== 'edit');
+            document.getElementById('pane-csv').classList.toggle('pane-hidden', name !== 'csv');
+            document.getElementById('pane-profiles').classList.toggle('pane-hidden', name !== 'profiles');
+            document.getElementById('tab-edit').classList.toggle('on', name === 'edit');
+            document.getElementById('tab-csv').classList.toggle('on', name === 'csv');
+            document.getElementById('tab-pro').classList.toggle('on', name === 'profiles');
+            if (name === 'profiles') loadProfiles();
+        }
+
+        function goSec(idx, el) {
+            document.querySelectorAll('.fp').forEach(p => p.classList.remove('on'));
+            document.getElementById('fp-' + idx).classList.add('on');
+            document.querySelectorAll('.sbtn').forEach(b => b.classList.remove('on'));
+            (el || document.querySelector(`.sbtn[onclick="goSec(${idx},this)"]`)).classList.add('on');
+        }
+
+        function selTpl(id, el) {
+            CUR_TPL = id;
+            document.querySelectorAll('.tc').forEach(c => c.classList.remove('on'));
+            el.classList.add('on');
+            upd();
+        }
+
+        // ═══════════════════════════════ ZOOM ════════════════════════════════════════
+        function zoom(d) {
+            zv = d === 0 ? 0.75 : Math.max(0.3, Math.min(1.5, zv + d));
+            document.getElementById('cv-wrap').style.transform = `scale(${zv})`;
+            document.getElementById('zval').textContent = Math.round(zv * 100) + '%';
+        }
+        zoom(0);
+
+        // ═══════════════════════════════ PHOTO ═══════════════════════════════════════
+        function loadPhoto(inp) {
+            const f = inp.files[0]; if (!f) return;
+            const r = new FileReader();
+            r.onload = e => {
+                photoB64 = e.target.result;
+                document.getElementById('ph-img').src = photoB64;
+                document.getElementById('ph-img').style.display = 'block';
+                document.getElementById('ph-placeholder').style.display = 'none';
+                document.getElementById('ph-circle').style.border = '2px solid var(--acc)';
+                document.getElementById('ph-clear-btn').style.display = 'flex';
+                document.getElementById('ph-rmbg-btn').style.display = 'flex';
+                upd();
+            };
+            r.readAsDataURL(f);
+        }
+        function clearPhoto() {
+            photoB64 = null;
+            document.getElementById('ph-img').style.display = 'none';
+            document.getElementById('ph-img').src = '';
+            document.getElementById('ph-placeholder').style.display = 'block';
+            document.getElementById('ph-circle').style.border = '2px dashed var(--bdr2)';
+            document.getElementById('ph-clear-btn').style.display = 'none';
+            document.getElementById('ph-rmbg-btn').style.display = 'none';
+            document.getElementById('ph-inp').value = '';
+            upd();
+        }
+
+        async function removeBg() {
+            const btn = document.getElementById('ph-rmbg-btn');
+            const status = document.getElementById('ph-status');
+            btn.textContent = '⏳ Procesando...'; btn.disabled = true;
+            status.textContent = 'Eliminando fondo, un momento...'; status.style.display = 'block';
+            try {
+                const r = await fetch('/remove-bg', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ photo: photoB64 })
+                });
+                const j = await r.json();
+                if (j.error) throw new Error(j.error);
+                photoB64 = j.photo;
+                document.getElementById('ph-img').src = photoB64;
+                status.textContent = '✓ Fondo eliminado correctamente';
+                status.style.color = 'var(--grn)';
+                upd();
+            } catch (e) {
+                status.textContent = '⚠ Error al procesar: ' + e.message;
+                status.style.color = 'var(--acc)';
+            } finally {
+                btn.textContent = '✨ Fondo blanco'; btn.disabled = false;
+                setTimeout(() => { status.style.display = 'none'; status.style.color = 'var(--sub)'; }, 3000);
+            }
+        }
+
+        // ═══════════════════════════════ ADD ITEMS ═══════════════════════════════════
+        function addExp() {
+            const id = ++expN;
+            document.getElementById('exp-list').insertAdjacentHTML('beforeend', `
+  <div class="ic-card" id="exp-${id}">
+    <div class="ic-head"><span class="ic-title">Experiencia ${id}</span><button class="del-btn" onclick="del('exp-${id}');reTrans(document.getElementById('exp-${id}'));
+            updBadge('exp-','b-exp');upd()">✕</button></div>
+    <div class="r2"><div class="fg"><label>Cargo *</label><input id="ep-${id}" placeholder="Analista Programador" oninput="upd()"></div><div class="fg"><label>Empresa *</label><input id="ec-${id}" placeholder="Yacuruna SAC" oninput="upd()"></div></div>
+    <div class="r2"><div class="fg"><label>Inicio</label><input id="es-${id}" placeholder="oct 2022" oninput="upd()"></div><div class="fg"><label>Fin</label><input id="ee-${id}" placeholder="Presente" oninput="upd()"></div></div>
+    <div class="fg"><label>Descripción</label><textarea id="ed-${id}" rows="3" placeholder="Responsabilidades y logros…" oninput="upd()"></textarea></div>
+  </div>`);
+            reTrans(document.getElementById(`exp-${id}`));
+            updBadge('exp-', 'b-exp'); upd();
+        }
+
+        function addEdu() {
+            const id = ++eduN;
+            document.getElementById('edu-list').insertAdjacentHTML('beforeend', `
+  <div class="ic-card" id="edu-${id}">
+    <div class="ic-head"><span class="ic-title">Formación ${id}</span><button class="del-btn" onclick="del('edu-${id}');reTrans(document.getElementById('edu-${id}'));
+            updBadge('edu-','b-edu');upd()">✕</button></div>
+    <div class="r2"><div class="fg"><label>Titulación</label><input id="edg-${id}" placeholder="Ing. de Computación" oninput="upd()"></div><div class="fg"><label>Institución</label><input id="edi-${id}" placeholder="USMP" oninput="upd()"></div></div>
+    <div class="r2"><div class="fg"><label>Inicio</label><input id="eds-${id}" placeholder="2018" oninput="upd()"></div><div class="fg"><label>Fin</label><input id="ede-${id}" placeholder="2025" oninput="upd()"></div></div>
+  </div>`);
+            reTrans(document.getElementById(`edu-${id}`));
+            updBadge('edu-', 'b-edu'); upd();
+        }
+
+        function addSk() {
+            const id = ++skN;
+            document.getElementById('sk-list').insertAdjacentHTML('beforeend', `
+  <div class="sk-row" id="sk-${id}">
+    <input id="skn-${id}" placeholder="Python, Docker, Liderazgo…" oninput="upd()">
+    <div class="dots" id="skd-${id}" data-lv="3">
+      ${[1, 2, 3, 4, 5].map(n => `<div class="dot${n <= 3 ? ' on' : ''}" onclick="setLv(${id},${n})"></div>`).join('')}
+    </div>
+    <button class="del-btn" onclick="del('sk-${id}');reTrans(document.getElementById('sk-${id}'));
+            updBadge('sk-','b-sk');upd()">✕</button>
+  </div>`);
+            reTrans(document.getElementById(`sk-${id}`));
+            updBadge('sk-', 'b-sk'); upd();
+        }
+
+        function setLv(id, lv) {
+            const el = document.getElementById(`skd-${id}`); if (!el) return;
+            el.dataset.lv = lv;
+            el.querySelectorAll('.dot').forEach((d, i) => { d.classList.toggle('on', i < lv); d.style.background = i < lv ? 'var(--acc)' : '' });
+            upd();
+        }
+
+        const LVL_OPTS = ['Nativo', 'C2 – Maestría', 'C1 – Avanzado', 'B2 – Intermedio alto', 'B1 – Intermedio', 'A2 – Elemental', 'A1 – Básico']
+            .map(l => `<option>${l}</option>`).join('');
+
+        function addLg() {
+            const id = ++lgN;
+            document.getElementById('lg-list').insertAdjacentHTML('beforeend', `
+  <div class="lg-row" id="lg-${id}">
+    <input id="lgn-${id}" placeholder="Inglés, Francés…" oninput="upd()">
+    <select id="lgl-${id}" onchange="upd()">${LVL_OPTS}</select>
+    <button class="del-btn" onclick="del('lg-${id}');reTrans(document.getElementById('lg-${id}'));
+            updBadge('lg-','b-lg');upd()">✕</button>
+  </div>`);
+            reTrans(document.getElementById(`lg-${id}`));
+            updBadge('lg-', 'b-lg'); upd();
+        }
+
+        function addCo() {
+            const id = ++coN;
+            document.getElementById('co-list').insertAdjacentHTML('beforeend', `
+  <div class="ic-card" id="co-${id}">
+    <div class="ic-head"><span class="ic-title">Curso ${id}</span><button class="del-btn" onclick="del('co-${id}');reTrans(document.getElementById('co-${id}'));
+            updBadge('co-','b-co');upd()">✕</button></div>
+    <div class="r2"><div class="fg"><label>Nombre</label><input id="con-${id}" placeholder="AWS Cloud Practitioner" oninput="upd()"></div><div class="fg"><label>Institución</label><input id="coi-${id}" placeholder="Coursera, Cisco…" oninput="upd()"></div></div>
+    <div class="fg"><label>Año</label><input id="coy-${id}" placeholder="2022" oninput="upd()" style="width:90px"></div>
+  </div>`);
+            reTrans(document.getElementById(`co-${id}`));
+            updBadge('co-', 'b-co'); upd();
+        }
+
+        function addRec() {
+            const id = ++recN;
+            document.getElementById('rec-list').insertAdjacentHTML('beforeend', `
+  <div class="ic-card" id="rec-${id}">
+    <div class="ic-head"><span class="ic-title">Recomendación ${id}</span><button class="del-btn" onclick="del('rec-${id}');reTrans(document.getElementById('rec-${id}'));
+            updBadge('rec-','b-rec');upd()">✕</button></div>
+    <div class="r2"><div class="fg"><label>Nombre *</label><input id="rn-${id}" placeholder="Carlos Ramírez" oninput="upd()"></div><div class="fg"><label>Cargo</label><input id="rp-${id}" placeholder="Gerente de TI" oninput="upd()"></div></div>
+    <div class="fg"><label>Empresa</label><input id="rc-${id}" placeholder="Tech Corp" oninput="upd()"></div>
+    <div class="fg"><label>Texto</label><textarea id="rt-${id}" rows="3" placeholder="Trabajé con… y puedo decir que…" oninput="upd()"></textarea></div>
+  </div>`);
+            reTrans(document.getElementById(`rec-${id}`));
+            updBadge('rec-', 'b-rec'); upd();
+        }
+
+        // ═══════════════════════════════ HELPERS ═════════════════════════════════════
+        function del(id) {
+            const el = document.getElementById(id); if (!el) return;
+            el.style.transition = '.16s'; el.style.opacity = '0'; el.style.transform = 'scale(.95)';
+            setTimeout(() => el.remove(), 170);
+        }
+        function updBadge(pfx, bid) {
+            const el = document.getElementById(bid); if (!el) return;
+            el.textContent = document.querySelectorAll(`[id^="${pfx}"]`).length;
+        }
+        const v = id => { const e = document.getElementById(id); return e ? e.value.trim() : ''; };
+
+        // ═══════════════════════════════ COLLECT ═════════════════════════════════════
+        function collect() {
+            const p = {
+                name: v('f-name'), title: v('f-title'), email: v('f-email'), phone: v('f-phone'),
+                location: v('f-loc'), linkedin: v('f-li'), website: v('f-web'),
+                dni: v('f-dni'), birthdate: v('f-birth'), nationality: v('f-nat'),
+                address: v('f-addr'), gender: v('f-gen'), photo: photoB64 || null
+            };
+            const experience = [], education = [], skills = [], languages = [], courses = [], recommendations = [];
+            for (let i = 1; i <= expN; i++) if (document.getElementById(`exp-${i}`))
+                experience.push({ position: v(`ep-${i}`), company: v(`ec-${i}`), start_date: v(`es-${i}`), end_date: v(`ee-${i}`), description: v(`ed-${i}`) });
+            for (let i = 1; i <= eduN; i++) if (document.getElementById(`edu-${i}`))
+                education.push({ degree: v(`edg-${i}`), institution: v(`edi-${i}`), start_date: v(`eds-${i}`), end_date: v(`ede-${i}`) });
+            for (let i = 1; i <= skN; i++) if (document.getElementById(`sk-${i}`)) {
+                const d = document.getElementById(`skd-${i}`);
+                skills.push({ name: v(`skn-${i}`), level: d ? parseInt(d.dataset.lv) : 3 });
+            }
+            for (let i = 1; i <= lgN; i++) if (document.getElementById(`lg-${i}`))
+                languages.push({ name: v(`lgn-${i}`), level: v(`lgl-${i}`) });
+            for (let i = 1; i <= coN; i++) if (document.getElementById(`co-${i}`))
+                courses.push({ name: v(`con-${i}`), institution: v(`coi-${i}`), year: v(`coy-${i}`) });
+            for (let i = 1; i <= recN; i++) if (document.getElementById(`rec-${i}`))
+                recommendations.push({ name: v(`rn-${i}`), position: v(`rp-${i}`), company: v(`rc-${i}`), text: v(`rt-${i}`) });
+            return {
+                lang: CURRENT_LANG, template: CUR_TPL, personal: p, summary: v('f-summary'),
+                experience, education, skills, languages, courses, recommendations, hobbies: v('f-hobbies')
+            };
+        }
+
+        // ═══════════════════════════════ LIVE PREVIEW ════════════════════════════════
+        function upd() { clearTimeout(deb); deb = setTimeout(renderPreview, 80); }
+        const sf = (s, d = '') => s || d;
+
+        function shortLv(s) {
+            if (!s) return 'B2';
+            const m = { 'nativo': 'Nativo', 'native': 'Nativo', 'c2': 'C2', 'c1': 'C1', 'b2': 'B2', 'b1': 'B1', 'a2': 'A2', 'a1': 'A1' };
+            const k = s.toLowerCase().split('–')[0].split('-')[0].trim().split(' ')[0];
+            return m[k] || k.toUpperCase().slice(0, 6);
+        }
+
+        function renderPreview() {
+            const data = collect();
+            const p = data.personal;
+            const cfg = TPLS.find(t => t.id === CUR_TPL) || TPLS[0];
+            const nm = sf(p.name, t('Tu Nombre'));
+            const init = nm.split(' ').slice(0, 2).map(x => x[0]?.toUpperCase() || '').join('');
+
+            // avatar HTML
+            const avHtml = p.photo
+                ? `<div class="av-wrap" style="border-color:${cfg.acc}"><img src="${p.photo}" alt="foto"></div>`
+                : `<div class="av-init" style="background:${cfg.acc}">${init}</div>`;
+
+            // contact items
+            const contacts = [];
+            if (p.email) contacts.push(['✉', p.email]);
+            if (p.phone) contacts.push(['✆', p.phone]);
+            if (p.address || p.location) contacts.push(['⌖', p.address || p.location]);
+            if (p.linkedin) contacts.push(['in', p.linkedin]);
+            if (p.website) contacts.push(['◈', p.website]);
+            if (p.dni) contacts.push(['🪪', 'DNI ' + p.dni]);
+            if (p.birthdate) contacts.push(['📅', p.birthdate]);
+            if (p.nationality) contacts.push(['🌎', p.nationality]);
+            if (p.gender && p.gender !== '— No mostrar —') contacts.push(['👤', p.gender]);
+
+            const contactHtml = contacts.map(([ic, val]) =>
+                `<div class="cv-sb-contact-item"><span class="cv-sb-contact-ic" style="color:${cfg.acc}">${ic}</span><span>${val}</span></div>`
+            ).join('');
+
+            // skills
+            const skillsHtml = data.skills.length
+                ? `<div class="cv-sb-sec">
+        <div class="cv-sb-sec-title" style="color:${cfg.acc}">Competencias</div>
+        <div class="cv-sb-sec-line"></div>
+        ${data.skills.slice(0, 12).map(sk => {
+                    const lv = parseInt(sk.level || 3);
+                    const bars = Array.from({ length: 5 }, (_, i) => `<div class="cv-sb-bar" style="background:${i < lv ? cfg.acc : (cfg.light ? '#cccccc' : 'rgba(255,255,255,.2)')}"></div>`).join('');
+                    return `<div class="cv-sb-skill">
+            <div class="cv-sb-skill-name">${sf(sk.name)}</div>
+            <div class="cv-sb-bars">${bars}</div>
+          </div>`;
+                }).join('')}
+      </div>` : '';
+
+            // languages
+            const langsHtml = data.languages.length
+                ? `<div class="cv-sb-sec">
+        <div class="cv-sb-sec-title" style="color:${cfg.acc}">Idiomas</div>
+        <div class="cv-sb-sec-line"></div>
+        ${data.languages.map(lg => `
+          <div class="cv-sb-lang">
+            <span>${sf(lg.name)}</span>
+            <span class="cv-sb-lang-tag" style="background:${cfg.acc}">${shortLv(lg.level || lg.speak)}</span>
+          </div>`).join('')}
+      </div>` : '';
+
+            // courses (sidebar)
+            const coursesHtml = data.courses.length
+                ? `<div class="cv-sb-sec">
+        <div class="cv-sb-sec-title" style="color:${cfg.acc}">Cursos</div>
+        <div class="cv-sb-sec-line"></div>
+        ${data.courses.slice(0, 4).map(co => `<div style="font-size:7.5px;margin-bottom:5px;line-height:1.4;padding-right:4px;${cfg.light ? 'color:#444' : 'color:rgba(255,255,255,.8)'}">${sf(co.name)}</div>`).join('')}
+      </div>` : '';
+
+            const interestsHtml = data.hobbies
+                ? `<div class="cv-sb-sec">
+        <div class="cv-sb-sec-title" style="color:${cfg.acc}">Intereses</div>
+        <div class="cv-sb-sec-line"></div>
+        <div style="font-size:7.5px;line-height:1.5;padding-right:4px;${cfg.light ? 'color:#444' : 'color:rgba(255,255,255,.75)'}">${data.hobbies}</div>
+      </div>` : '';
+
+            // main body
+            const mSec = (title) => `<div class="cv-sec-title" style="color:${cfg.acc}">${title}</div><div class="cv-sec-line" style="background:${cfg.acc}"></div>`;
+
+            let mainHtml = '';
+
+            if (data.summary)
+                mainHtml += `<div class="cv-sec">${mSec(t('Perfil'))}<div class="cv-summary">${data.summary}</div></div>`;
+
+            if (data.experience?.length) {
+                mainHtml += `<div class="cv-sec">${mSec(t('Experiencia'))}`;
+                data.experience.slice(0, 5).forEach(e => {
+                    mainHtml += `<div class="cv-exp">
+        <div class="cv-exp-row"><div class="cv-exp-pos" style="color:#1a1a2e">${sf(e.position)}</div><div class="cv-exp-date">${sf(e.start_date)} - ${sf(e.end_date, t('Presente'))}</div></div>
+        <div class="cv-exp-co" style="color:${cfg.acc}">${sf(e.company)}</div>
+        ${e.description ? `<div class="cv-exp-desc">${e.description}</div>` : ''}
+      </div>`;
+                });
+                mainHtml += '</div>';
+            }
+
+            // recommendations (sidebar)
+            const recsHtml_sb = data.recommendations?.length
+                ? `<div class="cv-sb-sec">
+        <div class="cv-sb-sec-title" style="color:${cfg.acc}">${t('Recomendaciones')}</div>
+        <div class="cv-sb-sec-line"></div>
+        ${data.recommendations.slice(0, 2).map(r => `
+          <div style="margin-bottom:8px">
+            <div style="font-size:8px;font-weight:700;color:${cfg.light ? '#111' : '#fff'}">${sf(r.name)}</div>
+            <div style="font-size:7px;color:${cfg.acc};font-style:italic">${sf(r.position)}</div>
+            ${r.text ? `<div style="font-size:7px;line-height:1.3;margin-top:2px;${cfg.light ? 'color:#444' : 'color:rgba(255,255,255,.7)'}">"${r.text}"</div>` : ''}
+          </div>`).join('')}
+      </div>` : '';
+
+            if (data.education?.length) {
+                mainHtml += `<div class="cv-sec">${mSec(t('Formación'))}`;
+                data.education.slice(0, 3).forEach(e => {
+                    mainHtml += `<div class="cv-exp">
+        <div class="cv-exp-row"><div class="cv-exp-pos" style="color:#1a1a2e">${sf(e.degree)}</div><div class="cv-exp-date">${sf(e.start_date)} - ${sf(e.end_date, t('Presente'))}</div></div>
+        <div class="cv-exp-co" style="color:${cfg.acc}">${sf(e.institution)}</div>
+      </div>`;
+                });
+                mainHtml += '</div>';
+            }
+
+            if (data.courses?.length) {
+                mainHtml += `<div class="cv-sec">${mSec(t('Cursos y Certificaciones'))}`;
+                data.courses.forEach(co => {
+                    mainHtml += `<div class="cv-course-item"><div class="cv-course-dot" style="background:${cfg.acc}"></div><span>${sf(co.name)}${co.institution ? ` <span style="color:#999;font-size:7.5px">· ${co.institution}</span>` : ''}</span><span class="cv-course-yr">${sf(co.year)}</span></div>`;
+                });
+                mainHtml += '</div>';
+            }
+
+            const lightClass = cfg.light ? ' light' : '';
+            const html = `<div class="cv-sb-layout">
+    <div class="cv-sb${lightClass}" style="background:${cfg.sb};width:200px">
+      <div class="cv-sb-header">
+        ${avHtml}
+        <div class="cv-sb-name">${nm}</div>
+        <div class="cv-sb-title" style="color:${cfg.acc}">${sf(p.title)}</div>
+      </div>
+      <div class="cv-sb-body">
+        <div class="cv-sb-sec" style="margin-top:4px">
+          <div class="cv-sb-sec-title" style="color:${cfg.acc}">Datos Personales</div>
+          <div class="cv-sb-sec-line"></div>
+          ${contactHtml}
+        </div>
+        ${skillsHtml}
+        ${langsHtml}
+        ${coursesHtml}
+        ${interestsHtml}
+        ${recsHtml_sb}
+      </div>
+    </div>
+    <div class="cv-main">
+      <div class="cv-main-name" style="color:#1a1a2e">${nm}</div>
+      <div class="cv-main-title" style="color:${cfg.acc}">${sf(p.title)}</div>
+      <div class="cv-main-rule" style="background:${cfg.acc}"></div>
+      ${mainHtml}
+    </div>
+  </div>`;
+
+            document.getElementById('cv-wrap').innerHTML = html;
+        }
+
+        // ═══════════════════════════════ CSV ════════════════════════════════════════
+        function csvDrag(e, on) { e.preventDefault(); document.getElementById('csv-drop').classList.toggle('drag', on) }
+        function csvDrop(e) { e.preventDefault(); csvLoad(e.dataTransfer.files[0]) }
+        async function csvLoad(file) {
+            if (!file) return;
+            const fd = new FormData(); fd.append('file', file);
+            try {
+                const r = await fetch('/import-csv', { method: 'POST', body: fd });
+                const d = await r.json();
+                if (d.error) { toast('Error CSV: ' + d.error, 'err'); return; }
+                restoreData(d); showPane('edit'); toast('✓ CSV importado');
+            } catch (e) { toast('Error al importar', 'err'); }
+        }
+
+        // ═══════════════════════════════ PROFILES ═══════════════════════════════════
+        function openSaveModal() { document.getElementById('pro-name-inp').value = ''; document.getElementById('save-modal').classList.add('show'); setTimeout(() => document.getElementById('pro-name-inp').focus(), 100) }
+        function closeSaveModal() { document.getElementById('save-modal').classList.remove('show') }
+        async function saveProfile() {
+            const n = document.getElementById('pro-name-inp').value.trim();
+            if (!n) { toast('Ponle un nombre', 'err'); return; }
+            const d = collect(); d._profile_id = curProfId || ''; d._profile_name = n;
+            const r = await fetch('/profiles', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) });
+            const j = await r.json(); curProfId = j.id; closeSaveModal(); toast(`✓ "${n}" guardado`);
+        }
+        async function loadProfiles() {
+            const ps = await fetch('/profiles').then(r => r.json());
+            const el = document.getElementById('pro-list');
+            if (!ps.length) { el.innerHTML = '<div class="empty"><div class="ei">📄</div><p>Sin perfiles guardados.<br>Completa tu CV y pulsa <strong>Guardar</strong>.</p></div>'; return; }
+            el.innerHTML = ps.map(p => {
+                const init = (p.cv_name || p.name || 'CV').split(' ').slice(0, 2).map(x => x[0]?.toUpperCase() || '').join('');
+                return `<div class="pro-card" onclick="loadProfile('${p.id}')">
+      <div class="pro-av">${init}</div>
+      <div class="pro-info"><div class="pro-name">${p.name}</div><div class="pro-meta">${p.cv_name || ''}${p.updated ? ' · ' + p.updated : ''}</div></div>
+      <div class="pro-tpl">${p.template}</div>
+      <div class="pro-act" onclick="event.stopPropagation()">
+        <button class="ico-btn" onclick="delProfile('${p.id}')">🗑</button>
+      </div>
+    </div>`;
+            }).join('');
+        }
+        async function loadProfile(id) {
+            const d = await fetch('/profiles/' + id).then(r => r.json());
+            curProfId = id; restoreData(d); showPane('edit'); toast('✓ Perfil cargado');
+        }
+        async function delProfile(id) {
+            if (!confirm('¿Eliminar?')) return;
+            await fetch('/profiles/' + id, { method: 'DELETE' });
+            loadProfiles(); toast('Perfil eliminado');
+        }
+
+        function restoreData(data) {
+            ['exp-list', 'edu-list', 'sk-list', 'lg-list', 'co-list', 'rec-list'].forEach(id => document.getElementById(id).innerHTML = '');
+            expN = eduN = skN = lgN = coN = recN = 0;
+            const set = (id, val) => { const e = document.getElementById(id); if (e) e.value = val || '' };
+            const p = data.personal || {};
+            set('f-name', p.name); set('f-title', p.title); set('f-email', p.email);
+            set('f-phone', p.phone); set('f-loc', p.location); set('f-li', p.linkedin);
+            set('f-web', p.website); set('f-dni', p.dni); set('f-birth', p.birthdate);
+            set('f-nat', p.nationality); set('f-addr', p.address);
+            const gs = document.getElementById('f-gen'); if (gs && p.gender) gs.value = p.gender;
+            set('f-summary', data.summary); set('f-hobbies', data.hobbies);
+            if (p.photo) { photoB64 = p.photo; const img = document.getElementById('ph-img'); img.src = p.photo; img.style.display = 'block'; document.getElementById('ph-placeholder').style.display = 'none'; document.getElementById('ph-circle').style.border = '2px solid var(--acc)'; document.getElementById('ph-clear-btn').style.display = 'flex'; document.getElementById('ph-rmbg-btn').style.display = 'flex'; }
+            else { clearPhoto(); }
+            (data.experience || []).forEach(e => { addExp(); set(`ep-${expN}`, e.position); set(`ec-${expN}`, e.company); set(`es-${expN}`, e.start_date); set(`ee-${expN}`, e.end_date); set(`ed-${expN}`, e.description); });
+            (data.education || []).forEach(e => { addEdu(); set(`edg-${eduN}`, e.degree); set(`edi-${eduN}`, e.institution); set(`eds-${eduN}`, e.start_date); set(`ede-${eduN}`, e.end_date); });
+            (data.skills || []).forEach(s => { addSk(); set(`skn-${skN}`, s.name); setLv(skN, parseInt(s.level || s.level_speak || 3)); });
+            (data.languages || []).forEach(l => { addLg(); set(`lgn-${lgN}`, l.name); const sl = document.getElementById(`lgl-${lgN}`); if (sl) { const lv = l.level || l.speak || ''; const opt = [...sl.options].find(o => o.text.toLowerCase().startsWith(lv.toLowerCase().slice(0, 3))); if (opt) sl.value = opt.value; else sl.value = sl.options[3].value; } });
+            (data.courses || []).forEach(c => { addCo(); set(`con-${coN}`, c.name); set(`coi-${coN}`, c.institution); set(`coy-${coN}`, c.year); });
+            (data.recommendations || []).forEach(r => { addRec(); set(`rn-${recN}`, r.name); set(`rp-${recN}`, r.position); set(`rc-${recN}`, r.company); set(`rt-${recN}`, r.text); });
+            CUR_TPL = data.template || 'clasica_azul';
+            if (data.lang) {
+                document.getElementById('lang-sel').value = data.lang;
+                changeLang(data.lang);
+            }
+
+            document.querySelectorAll('.tc').forEach(c => c.classList.toggle('on', c.getAttribute('onclick')?.includes(`'${CUR_TPL}'`)));
+            upd();
+        }
+
+        // ═══════════════════════════════ PDF ════════════════════════════════════════
+        async function genPDF() {
+            const d = collect();
+            if (!d.personal.name) { toast('Añade tu nombre primero', 'err'); goSec(0, null); return; }
+            document.getElementById('overlay').classList.add('show');
+            try {
+                const r = await fetch('/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) });
+                if (!r.ok) throw new Error();
+                const blob = await r.blob();
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = `CV_${d.personal.name.replace(/\s+/g, '_')}.pdf`;
+                a.click(); toast('✓ PDF descargado');
+            } catch (e) { toast('Error al generar PDF', 'err'); }
+            finally { document.getElementById('overlay').classList.remove('show'); }
+        }
+
+        // ═══════════════════════════════ TOAST / MODAL ═══════════════════════════════
+        function toast(msg, type = 'ok') { const t = document.getElementById('toast'); t.textContent = msg; t.className = `toast ${type} show`; setTimeout(() => t.classList.remove('show'), 3000); }
+        document.getElementById('save-modal').addEventListener('click', function (e) { if (e.target === this) closeSaveModal(); });
+        document.getElementById('pro-name-inp').addEventListener('keydown', e => { if (e.key === 'Enter') saveProfile(); });
+
+        // ═══════════════════════════════ INIT ════════════════════════════════════════
+        addExp(); addEdu(); addSk(); addLg();
+        showPane('edit');
+        renderPreview();
+    </script>
+</body>
+
+</html>

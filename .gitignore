@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+env/
+venv/
+ENV/
+
+# Flask / Profiles
+profiles/
+
+# User Data
+*.csv
+
+# OS
+.DS_Store
+Thumbs.db
