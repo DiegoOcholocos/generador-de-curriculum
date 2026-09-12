@@ -1,0 +1,485 @@
+/*
+ * CV rendering styles — the single source of truth for the resume's visual
+ * design. Loaded by templates/index.html (live browser preview) AND inlined
+ * into the server-rendered document that Playwright turns into the PDF
+ * (see pdf_render.py / templates/cv_render.html), so the two can no longer
+ * drift apart the way the old hand-drawn reportlab layout used to.
+ */
+
+/* CV preview wrapper — A4 proportions */
+.cv-wrap {
+    position: relative;
+    width: 600px;
+    min-height: 848px;
+    background: #fff;
+    box-shadow: 0 10px 48px rgba(0, 0, 0, .6);
+    border-radius: 3px;
+    overflow: hidden;
+    transform-origin: top center;
+    transition: transform .2s
+}
+
+/* ── CV PREVIEW INTERNALS ── */
+/* sidebar layout */
+.cv-sb-layout {
+    display: flex;
+    min-height: 848px;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 9px
+}
+
+/* No flex here (or in the header/avatar/contact rules below): this whole
+   column sits inside a floated, page-fragmented sidebar in the PDF, and
+   Chromium's print engine has repeatedly miscalculated flex containers'
+   available width right at a page break (see .cv-sb-bars and .cv-sb-lang
+   above for the two confirmed cases). Centering via text-align/inline-block
+   and rows via float achieve the same look without that failure mode. */
+.cv-sb {
+    width: 200px
+}
+
+/* WHITE header zone: foto */
+.cv-sb-header {
+    width: 100%;
+    text-align: center;
+    padding: 16px 12px 12px
+}
+
+.cv-sb .av-wrap {
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid;
+    margin-bottom: 9px;
+    background: #fff
+}
+
+.cv-sb .av-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block
+}
+
+.cv-sb .av-init {
+    display: inline-flex;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    font-family: 'Fraunces', serif;
+    margin-bottom: 9px;
+    box-shadow: 0 0 0 3px #fff
+}
+
+/* Dark body */
+.cv-sb-body {
+    width: 100%;
+    padding: 10px 0 20px
+}
+
+.cv-sb-div {
+    height: .5px;
+    width: calc(100% - 24px);
+    margin: 0 12px 10px;
+    opacity: .2;
+    background: #fff
+}
+
+.cv-sb-sec {
+    width: 100%;
+    padding: 0 14px;
+    margin-bottom: 2px
+}
+
+.cv-sb-sec-title {
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 3px
+}
+
+.cv-sb-sec-line {
+    height: .5px;
+    margin-bottom: 8px;
+    opacity: .2;
+    background: #fff
+}
+
+/* No float here — a float nested inside the sidebar's own outer float can
+   detach from its row and land on the wrong page when the row sits right at
+   a page break (worse than the flex miscalculation this replaced: the tag
+   doesn't just stretch, it visibly separates from its text entirely).
+   Plain inline-block is what actually survives fragmentation reliably. */
+.cv-sb-contact-item {
+    margin-bottom: 4px;
+    font-size: 7.5px;
+    color: rgba(255, 255, 255, .88);
+    line-height: 1.4
+}
+
+.cv-sb-contact-ic {
+    display: inline-block;
+    width: 14px;
+    font-size: 8px
+}
+
+.cv-sb-skill {
+    margin-bottom: 10px
+}
+
+.cv-sb-skill-name {
+    font-size: 8px;
+    color: rgba(255, 255, 255, .9);
+    margin-bottom: 3px
+}
+
+/* Fixed pixel widths instead of a flex row: Chromium's print engine can
+   miscalculate a nested flex container's available width when it sits
+   inside a floated, page-fragmented ancestor (the sidebar), stretching one
+   segment far past the sidebar's edge. A flex-free layout with hardcoded
+   widths sidesteps that recalculation entirely — same total width either
+   way, since it's sized to fit the 200px sidebar regardless of layout mode. */
+.cv-sb-bars {
+    display: block;
+    font-size: 0;
+    line-height: 0
+}
+
+.cv-sb-bar {
+    display: inline-block;
+    width: 30px;
+    height: 5px;
+    margin-right: 2px;
+    border-radius: 2px;
+    vertical-align: top
+}
+
+.cv-sb-bar:last-child {
+    margin-right: 0
+}
+
+/* Plain inline instead of flex or float. flex (justify-content:space-between)
+   let Chromium's print engine miscalculate the row's available width right
+   at a page boundary, stretching the tag out past the sidebar's edge; a
+   nested float (float:right) was worse — it could detach from its row
+   entirely and land on the next page without its text. Inline content is
+   what actually survives fragmentation reliably here, at the cost of the
+   tag sitting right after the language name instead of flush to the right
+   edge of the sidebar. */
+.cv-sb-lang {
+    margin-bottom: 7px;
+    font-size: 8.5px;
+    color: rgba(255, 255, 255, .9)
+}
+
+.cv-sb-lang-tag {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 7px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: #fff;
+    vertical-align: middle
+}
+
+.cv-sb.light .cv-sb-sec-line {
+    background: #aaa
+}
+
+.cv-sb.light .cv-sb-div {
+    background: #aaa
+}
+
+.cv-sb.light .cv-sb-contact-item {
+    color: #333
+}
+
+.cv-sb.light .cv-sb-skill-name {
+    color: #333
+}
+
+.cv-sb.light .cv-sb-lang {
+    color: #333
+}
+
+/* main body */
+.cv-main {
+    flex: 1;
+    padding: 20px 20px 20px 18px;
+    background: #fff
+}
+
+.cv-main-name {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 2px
+}
+
+.cv-main-title {
+    font-size: 11px;
+    margin-bottom: 8px
+}
+
+.cv-main-rule {
+    height: 1.5px;
+    margin-bottom: 14px
+}
+
+.cv-sec {
+    margin-bottom: 14px
+}
+
+.cv-sec-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    margin-bottom: 3px
+}
+
+.cv-sec-line {
+    height: 1px;
+    margin-bottom: 8px
+}
+
+.cv-summary {
+    font-size: 8.5px;
+    color: #444;
+    line-height: 1.55
+}
+
+.cv-exp {
+    margin-bottom: 9px
+}
+
+.cv-exp-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline
+}
+
+.cv-exp-pos {
+    font-size: 10.5px;
+    font-weight: 700
+}
+
+.cv-exp-date {
+    font-size: 7.5px;
+    color: #999
+}
+
+.cv-exp-co {
+    font-size: 8.5px;
+    font-style: italic;
+    margin: 1px 0 3px
+}
+
+.cv-exp-desc {
+    font-size: 8px;
+    color: #555;
+    line-height: 1.45
+}
+
+.cv-course-item {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 5px;
+    font-size: 8.5px
+}
+
+.cv-course-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 1px
+}
+
+.cv-course-yr {
+    font-size: 7.5px;
+    color: #999;
+    margin-left: auto;
+    white-space: nowrap
+}
+
+.cv-rec {
+    padding: 6px 8px;
+    border-radius: 5px;
+    border-left: 3px solid;
+    margin-bottom: 7px;
+    background: #f9f9f9
+}
+
+.cv-rec-name {
+    font-size: 9.5px;
+    font-weight: 700;
+    margin-bottom: 1px
+}
+
+.cv-rec-role {
+    font-size: 8px;
+    font-style: italic;
+    margin-bottom: 3px
+}
+
+.cv-rec-text {
+    font-size: 8px;
+    color: #666;
+    line-height: 1.45
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   ATS / single-column layout — no sidebar, no icons-as-meaning, no bar-chart
+   skill meters (those are pure graphics an ATS text parser can't read).
+   Reuses .cv-sec / .cv-sec-title / .cv-sec-line / .cv-summary / .cv-exp* /
+   .cv-course-item / .cv-rec from the sidebar layout above, since those are
+   already plain single-column blocks.
+   ══════════════════════════════════════════════════════════════════════ */
+.cv-ats {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 9px;
+    color: #222;
+    background: #fff;
+    padding: 26px 30px
+}
+
+.cv-ats-header {
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1.5px solid #ddd
+}
+
+.cv-ats-name {
+    font-size: 22px;
+    font-weight: 700;
+    color: #111;
+    line-height: 1.2;
+    margin-bottom: 2px
+}
+
+.cv-ats-title {
+    font-size: 11px;
+    color: #555;
+    margin-bottom: 8px
+}
+
+.cv-ats-contacts {
+    font-size: 8px;
+    color: #555;
+    line-height: 1.7
+}
+
+.cv-ats-contacts span:not(:last-child)::after {
+    content: ' \2022 ';
+    color: #bbb
+}
+
+.cv-ats-list {
+    font-size: 8.5px;
+    color: #333;
+    line-height: 1.9
+}
+
+.cv-ats-list span:not(:last-child)::after {
+    content: ' \00b7 ';
+    color: #aaa
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   PDF / PRINT MODE
+   Applied only when rendering the standalone document for Playwright
+   (body.pdf-mode), never in the live browser preview.
+
+   The sidebar layout is `display:flex` on screen (fine — the preview never
+   paginates), but Chromium's print engine does not fragment flex containers
+   across pages correctly: on a 2+ page resume this produced a sidebar whose
+   background stopped partway down and whose text silently vanished instead
+   of repeating or flowing.
+
+   An earlier fix absolutely-positioned the sidebar instead, which stopped
+   the corruption but traded it for a different problem: absolutely
+   positioned content doesn't fragment either, so a sidebar taller than one
+   page (a resume with many skills) just got its overflow sliced off mid
+   line on page 2 instead of continuing cleanly.
+
+   `float: left` is the fix that actually fragments properly in Chromium's
+   print engine — floats remain part of normal in-flow pagination, unlike
+   flex and absolute content. `.cv-main` gets a matching left margin so it
+   sits beside the float. `.cv-sb-layout` uses `display: flow-root` so its
+   own height correctly grows to contain the float (a plain block wouldn't).
+   The colored `.cv-sb-bg` gutter is still a separate absolutely-positioned,
+   negative-z-index rectangle spanning the full document height — it has no
+   text to fragment, so painting it as one tall shape sliced across pages by
+   the printer is fine; giving it z-index:-1 keeps it from painting over the
+   float/main text now that it's no longer the only positioned sibling.
+   ══════════════════════════════════════════════════════════════════════ */
+@page {
+    size: A4;
+    margin: 0
+}
+
+body.pdf-mode {
+    margin: 0;
+    padding: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact
+}
+
+body.pdf-mode .cv-wrap {
+    width: 600px;
+    min-height: 0;
+    box-shadow: none;
+    border-radius: 0;
+    transform: none;
+    overflow: visible
+}
+
+body.pdf-mode .cv-doc {
+    position: relative
+}
+
+body.pdf-mode .cv-sb-layout {
+    display: flow-root;
+    position: relative;
+    z-index: 0;
+    min-height: 0
+}
+
+body.pdf-mode .cv-sb-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 100%;
+    z-index: -1
+}
+
+body.pdf-mode .cv-sb {
+    float: left;
+    background: transparent !important
+}
+
+body.pdf-mode .cv-main {
+    margin-left: 200px;
+    flex: none
+}
+
+body.pdf-mode .cv-exp,
+body.pdf-mode .cv-course-item,
+body.pdf-mode .cv-sb-skill,
+body.pdf-mode .cv-sb-lang,
+body.pdf-mode .cv-rec,
+body.pdf-mode .cv-sec-title {
+    break-inside: avoid
+}

@@ -1,19 +1,61 @@
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
 *.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
 .venv/
 env/
 venv/
 ENV/
 
-# Flask / Profiles
+# Flask / app data
 profiles/
+profiles.db
+*.sqlite3
+*.db
 
-# User Data
+# Archivos de usuario y personales
 *.csv
+*.xlsx
+*.xls
+*.json
+*.env
+.env*
+secrets/
+private/
+personal/
 
-# OS
+# IDE / sistema
+.vscode/
+.idea/
+*.swp
+*.swo
 .DS_Store
 Thumbs.db
+
+# Logs y temporales
+*.log
+*.tmp
+*.temp
+*.bak
+*.orig
+*.rej
+
+# Builds / artefactos
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Archivos locales opcionales
+README_local.md
+notes.md

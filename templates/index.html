@@ -8,6 +8,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap"
         rel="stylesheet">
+    <link href="{{ url_for('static', filename='cv.css') }}" rel="stylesheet">
     <style>
         :root {
             --bg: #0c0c12;
@@ -829,6 +830,47 @@
             animation: pulse 1.5s infinite
         }
 
+        .page-badge {
+            background: var(--card2);
+            color: var(--sub);
+            font-size: 10px;
+            font-weight: 600;
+            padding: 3px 9px;
+            border-radius: 20px;
+            border: 1px solid var(--bdr2);
+            white-space: nowrap
+        }
+
+        .page-badge.warn {
+            background: rgba(233, 69, 96, .14);
+            color: var(--acc);
+            border-color: rgba(233, 69, 96, .25)
+        }
+
+        /* Dashed guide marking where the PDF would break onto the next page —
+           only meaningful once content overflows one A4 page's worth of height. */
+        .page-break-guide {
+            position: absolute;
+            left: 0;
+            right: 0;
+            border-top: 1.5px dashed #e94560;
+            z-index: 40;
+            pointer-events: none
+        }
+
+        .page-break-guide span {
+            position: absolute;
+            top: 3px;
+            right: 8px;
+            font-size: 9px;
+            font-weight: 700;
+            color: #e94560;
+            background: #fff;
+            padding: 1px 6px;
+            border-radius: 3px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .25)
+        }
+
         @keyframes pulse {
 
             0%,
@@ -886,355 +928,6 @@
             padding: 20px;
             scrollbar-width: thin;
             scrollbar-color: var(--bdr2) transparent
-        }
-
-        /* CV preview wrapper — A4 proportions */
-        .cv-wrap {
-            width: 600px;
-            min-height: 848px;
-            background: #fff;
-            box-shadow: 0 10px 48px rgba(0, 0, 0, .6);
-            border-radius: 3px;
-            overflow: hidden;
-            transform-origin: top center;
-            transition: transform .2s
-        }
-
-        /* ── CV PREVIEW INTERNALS ── */
-        /* sidebar layout */
-        .cv-sb-layout {
-            display: flex;
-            min-height: 848px;
-            font-family: Helvetica, Arial, sans-serif;
-            font-size: 9px
-        }
-
-        .cv-sb {
-            flex-shrink: 0;
-            width: 200px;
-            display: flex;
-            flex-direction: column;
-            align-items: center
-        }
-
-        /* WHITE header zone: foto + nombre + titulo */
-        .cv-sb-header {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 16px 12px 12px
-        }
-
-        .cv-sb .av-wrap {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            overflow: hidden;
-            flex-shrink: 0;
-            border: 3px solid;
-            margin-bottom: 9px;
-            background: #fff
-        }
-
-        .cv-sb .av-wrap img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block
-        }
-
-        .cv-sb .av-init {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: 700;
-            color: #fff;
-            font-family: 'Fraunces', serif;
-            margin-bottom: 9px;
-            box-shadow: 0 0 0 3px #fff
-        }
-
-        .cv-sb-name {
-            font-size: 11px;
-            font-weight: 700;
-            color: #fff;
-            text-align: center;
-            line-height: 1.3;
-            margin-bottom: 2px
-        }
-
-        .cv-sb-title {
-            font-size: 8px;
-            text-align: center;
-            margin-bottom: 0
-        }
-
-        /* Dark body */
-        .cv-sb-body {
-            width: 100%;
-            flex: 1;
-            padding: 10px 0 20px
-        }
-
-        .cv-sb-div {
-            height: .5px;
-            width: calc(100% - 24px);
-            margin: 0 12px 10px;
-            opacity: .2;
-            background: #fff
-        }
-
-        .cv-sb-sec {
-            width: 100%;
-            padding: 0 14px;
-            margin-bottom: 2px
-        }
-
-        .cv-sb-sec-title {
-            font-size: 8px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 3px
-        }
-
-        .cv-sb-sec-line {
-            height: .5px;
-            margin-bottom: 8px;
-            opacity: .2;
-            background: #fff
-        }
-
-        .cv-sb-contact-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 6px;
-            margin-bottom: 4px;
-            font-size: 7.5px;
-            color: rgba(255, 255, 255, .88);
-            line-height: 1.4
-        }
-
-        .cv-sb-contact-ic {
-            flex-shrink: 0;
-            font-size: 8px;
-            margin-top: .5px
-        }
-
-        .cv-sb-skill {
-            margin-bottom: 10px
-        }
-
-        .cv-sb-skill-name {
-            font-size: 8px;
-            color: rgba(255, 255, 255, .9);
-            margin-bottom: 3px
-        }
-
-        .cv-sb-bars {
-            display: flex;
-            gap: 2px
-        }
-
-        .cv-sb-bar {
-            height: 5px;
-            border-radius: 2px;
-            flex: 1
-        }
-
-        .cv-sb-lang {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 7px;
-            font-size: 8.5px;
-            color: rgba(255, 255, 255, .9)
-        }
-
-        .cv-sb-lang-tag {
-            font-size: 7px;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 3px;
-            color: #fff
-        }
-
-        .cv-sb.light .cv-sb-sec-line {
-            background: #aaa
-        }
-
-        .cv-sb.light .cv-sb-div {
-            background: #aaa
-        }
-
-        .cv-sb.light .cv-sb-contact-item {
-            color: #333
-        }
-
-        .cv-sb.light .cv-sb-skill-name {
-            color: #333
-        }
-
-        .cv-sb.light .cv-sb-lang {
-            color: #333
-        }
-
-        /* main body */
-        .cv-main {
-            flex: 1;
-            padding: 20px 20px 20px 18px;
-            background: #fff
-        }
-
-        .cv-main-name {
-            font-size: 22px;
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 2px
-        }
-
-        .cv-main-title {
-            font-size: 11px;
-            margin-bottom: 8px
-        }
-
-        .cv-main-rule {
-            height: 1.5px;
-            margin-bottom: 14px
-        }
-
-        .cv-sec {
-            margin-bottom: 14px
-        }
-
-        .cv-sec-title {
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: .5px;
-            text-transform: uppercase;
-            margin-bottom: 3px
-        }
-
-        .cv-sec-line {
-            height: 1px;
-            margin-bottom: 8px
-        }
-
-        .cv-summary {
-            font-size: 8.5px;
-            color: #444;
-            line-height: 1.55
-        }
-
-        .cv-exp {
-            margin-bottom: 9px
-        }
-
-        .cv-exp-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline
-        }
-
-        .cv-exp-pos {
-            font-size: 10.5px;
-            font-weight: 700
-        }
-
-        .cv-exp-date {
-            font-size: 7.5px;
-            color: #999
-        }
-
-        .cv-exp-co {
-            font-size: 8.5px;
-            font-style: italic;
-            margin: 1px 0 3px
-        }
-
-        .cv-exp-desc {
-            font-size: 8px;
-            color: #555;
-            line-height: 1.45
-        }
-
-        .cv-course-item {
-            display: flex;
-            align-items: baseline;
-            gap: 6px;
-            margin-bottom: 5px;
-            font-size: 8.5px
-        }
-
-        .cv-course-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            flex-shrink: 0;
-            margin-top: 1px
-        }
-
-        .cv-course-yr {
-            font-size: 7.5px;
-            color: #999;
-            margin-left: auto;
-            white-space: nowrap
-        }
-
-        .cv-rec {
-            padding: 6px 8px;
-            border-radius: 5px;
-            border-left: 3px solid;
-            margin-bottom: 7px;
-            background: #f9f9f9
-        }
-
-        .cv-rec-name {
-            font-size: 9.5px;
-            font-weight: 700;
-            margin-bottom: 1px
-        }
-
-        .cv-rec-role {
-            font-size: 8px;
-            font-style: italic;
-            margin-bottom: 3px
-        }
-
-        .cv-rec-text {
-            font-size: 8px;
-            color: #666;
-            line-height: 1.45
-        }
-
-        /* light sidebar (minimalista/pastel) */
-        .cv-sb.light .cv-sb-name {
-            color: #222
-        }
-
-        .cv-sb.light .cv-sb-sec-line {
-            background: #aaa
-        }
-
-        .cv-sb.light .cv-sb-div {
-            background: #aaa
-        }
-
-        .cv-sb.light .cv-sb-contact-item {
-            color: #333
-        }
-
-        .cv-sb.light .cv-sb-skill-name {
-            color: #333
-        }
-
-        .cv-sb.light .cv-sb-lang {
-            color: #333
         }
 
         /* overlay / toast */
@@ -1353,7 +1046,7 @@
                 <div style="margin-bottom:12px">
                     <div
                         style="font-size:10px;font-weight:700;color:var(--sub);letter-spacing:1px;text-transform:uppercase;margin-bottom:9px">
-                        Plantilla (10 diseños)</div>
+                        Plantilla (11 diseños)</div>
                     <div class="tgrid" id="tgrid"></div>
                 </div>
                 <div class="divider"></div>
@@ -1369,24 +1062,28 @@
                             class="chk">✓</span>
                     </div>
                     <div class="sbtn" onclick="goSec(3,this)">
-                        <div class="ic">🎓</div>Formación<span class="badge" id="b-edu">0</span><span
+                        <div class="ic">🚀</div>Proyectos<span class="badge" id="b-proj">0</span><span
                             class="chk">✓</span>
                     </div>
                     <div class="sbtn" onclick="goSec(4,this)">
-                        <div class="ic">⚡</div>Competencias<span class="badge" id="b-sk">0</span><span
+                        <div class="ic">🎓</div>Formación<span class="badge" id="b-edu">0</span><span
                             class="chk">✓</span>
                     </div>
                     <div class="sbtn" onclick="goSec(5,this)">
-                        <div class="ic">🌐</div>Idiomas<span class="badge" id="b-lg">0</span><span class="chk">✓</span>
+                        <div class="ic">⚡</div>Competencias<span class="badge" id="b-sk">0</span><span
+                            class="chk">✓</span>
                     </div>
                     <div class="sbtn" onclick="goSec(6,this)">
-                        <div class="ic">📚</div>Cursos<span class="badge" id="b-co">0</span><span class="chk">✓</span>
+                        <div class="ic">🌐</div>Idiomas<span class="badge" id="b-lg">0</span><span class="chk">✓</span>
                     </div>
                     <div class="sbtn" onclick="goSec(7,this)">
+                        <div class="ic">📚</div>Cursos<span class="badge" id="b-co">0</span><span class="chk">✓</span>
+                    </div>
+                    <div class="sbtn" onclick="goSec(8,this)">
                         <div class="ic">⭐</div>Recomendaciones<span class="badge" id="b-rec">0</span><span
                             class="chk">✓</span>
                     </div>
-                    <div class="sbtn" onclick="goSec(8,this)">
+                    <div class="sbtn" onclick="goSec(9,this)">
                         <div class="ic">🎯</div>Intereses<span class="chk">✓</span>
                     </div>
                 </div>
@@ -1481,48 +1178,56 @@
                     <button class="add-btn" onclick="addExp()">＋ Añadir experiencia</button>
                 </div>
 
-                <!-- §3 Formación -->
+                <!-- §3 Proyectos -->
                 <div class="fp" id="fp-3">
+                    <div class="ft">Proyectos</div>
+                    <div class="fd">Proyectos personales, freelance o de portafolio que muestren tu trabajo.</div>
+                    <div id="proj-list"></div>
+                    <button class="add-btn" onclick="addProj()">＋ Añadir proyecto</button>
+                </div>
+
+                <!-- §4 Formación -->
+                <div class="fp" id="fp-4">
                     <div class="ft">Formación Académica</div>
                     <div class="fd">Universidad, instituto, máster u otra titulación oficial.</div>
                     <div id="edu-list"></div>
                     <button class="add-btn" onclick="addEdu()">＋ Añadir formación</button>
                 </div>
 
-                <!-- §4 Competencias -->
-                <div class="fp" id="fp-4">
+                <!-- §5 Competencias -->
+                <div class="fp" id="fp-5">
                     <div class="ft">Competencias</div>
                     <div class="fd">Habilidades técnicas y blandas. El nivel (1–5 puntos) indica tu dominio.</div>
                     <div id="sk-list"></div>
                     <button class="add-btn" onclick="addSk()">＋ Añadir competencia</button>
                 </div>
 
-                <!-- §5 Idiomas -->
-                <div class="fp" id="fp-5">
+                <!-- §6 Idiomas -->
+                <div class="fp" id="fp-6">
                     <div class="ft">Idiomas</div>
                     <div class="fd">Indica tu nivel general usando el Marco Europeo (A1–C2) o "Nativo".</div>
                     <div id="lg-list"></div>
                     <button class="add-btn" onclick="addLg()">＋ Añadir idioma</button>
                 </div>
 
-                <!-- §6 Cursos -->
-                <div class="fp" id="fp-6">
+                <!-- §7 Cursos -->
+                <div class="fp" id="fp-7">
                     <div class="ft">Cursos y Certificaciones</div>
                     <div class="fd">Bootcamps, certificaciones, formación online relevante.</div>
                     <div id="co-list"></div>
                     <button class="add-btn" onclick="addCo()">＋ Añadir curso</button>
                 </div>
 
-                <!-- §7 Recomendaciones -->
-                <div class="fp" id="fp-7">
+                <!-- §8 Recomendaciones -->
+                <div class="fp" id="fp-8">
                     <div class="ft">Recomendaciones</div>
                     <div class="fd">Testimonios de jefes, clientes o colegas que avalen tu trabajo.</div>
                     <div id="rec-list"></div>
                     <button class="add-btn" onclick="addRec()">＋ Añadir recomendación</button>
                 </div>
 
-                <!-- §8 Intereses -->
-                <div class="fp" id="fp-8">
+                <!-- §9 Intereses -->
+                <div class="fp" id="fp-9">
                     <div class="ft">Intereses y Hobbies</div>
                     <div class="fd">Un toque personal que te hace memorable.</div>
                     <div class="fg"><label>Aficiones</label><textarea id="f-hobbies" rows="4"
@@ -1543,18 +1248,17 @@
                 <button class="btn btn-grn" style="width:100%;margin-bottom:16px"
                     onclick="window.open('/csv-template')">⬇ Descargar plantilla CSV</button>
                 <div style="background:var(--card2);border:1px solid var(--bdr2);border-radius:var(--R2);padding:13px">
-                    <div style="font-size:12px;font-weight:600;margin-bottom:8px">Formato (columnas)</div>
+                    <div style="font-size:12px;font-weight:600;margin-bottom:8px">Formato (por cabecera, no por posición)</div>
                     <div style="font-size:11px;color:var(--sub);line-height:1.8;font-family:monospace">
-                        personal,Nombre,Cargo,Email,Tel,Ciudad,LinkedIn,Web,DNI,FechaNac,Nacionalidad,Dirección,Género<br>
-                        summary,Texto<br>
-                        experience,Cargo,Empresa,Inicio,Fin,Descripción<br>
-                        education,Título,Institución,Inicio,Fin<br>
-                        skill,Nombre,Nivel(1-5)<br>
-                        language,Nombre,Nivel(A1-Nativo)<br>
-                        course,Nombre,Institución,Año<br>
-                        recommendation,Nombre,Cargo,Empresa,Texto<br>
-                        hobbies,Texto<br>
-                        template,clasica_azul
+                        seccion,campo1,campo2,campo3,...<br>
+                        personal,nombre,cargo,email,telefono,...<br>
+                        experience,posicion,empresa,inicio,fin,descripcion<br>
+                        ...<br><br>
+                        La primera columna sigue siendo la sección, pero ahora cada
+                        fila puede tener las columnas en cualquier orden si usas la
+                        plantilla descargada — se leen por nombre de cabecera, no
+                        por posición fija, así que reordenar o borrar una columna en
+                        Excel ya no descoloca los datos.
                     </div>
                 </div>
             </div>
@@ -1572,6 +1276,14 @@
                         <p>Sin perfiles guardados.<br>Completa tu CV y pulsa <strong>Guardar</strong>.</p>
                     </div>
                 </div>
+                <div style="display:flex;gap:8px;margin-top:14px">
+                    <button class="btn btn-ghost" style="flex:1;font-size:11px" onclick="exportProfileBackup()">⬇
+                        Exportar respaldo JSON</button>
+                    <button class="btn btn-ghost" style="flex:1;font-size:11px"
+                        onclick="document.getElementById('backup-inp').click()">⬆ Importar respaldo</button>
+                </div>
+                <input type="file" id="backup-inp" accept=".json" style="display:none"
+                    onchange="importProfileBackup(this.files[0])">
             </div>
         </div><!-- /left -->
 
@@ -1582,6 +1294,7 @@
                 <div class="live">
                     <div class="live-dot"></div>En vivo
                 </div>
+                <span class="page-badge" id="page-badge" title="Páginas estimadas del PDF">1 página</span>
                 <div style="flex:1"></div>
                 <div class="zbtns">
                     <button class="zbtn" onclick="zoom(-0.1)">−</button>
@@ -1622,18 +1335,9 @@
 
     <script>
         // ═══════════════════════════════ TEMPLATES ═══════════════════════════════════
-        const TPLS = [
-            { id: 'clasica_azul', label: 'Clásica', sb: '#2c3e50', acc: '#2980b9', light: false },
-            { id: 'moderna_roja', label: 'Moderna', sb: '#1a1a2e', acc: '#e94560', light: false },
-            { id: 'elegante_oro', label: 'Elegante', sb: '#1b1b1b', acc: '#c9a84c', light: false },
-            { id: 'oceano', label: 'Océano', sb: '#0d3b5e', acc: '#00b4d8', light: false },
-            { id: 'bosque', label: 'Bosque', sb: '#1b4332', acc: '#74c69d', light: false },
-            { id: 'carbon', label: 'Carbón', sb: '#1c1c1c', acc: '#ff6b35', light: false },
-            { id: 'aurora', label: 'Aurora', sb: '#2b2d42', acc: '#ef233c', light: false },
-            { id: 'violeta', label: 'Violeta', sb: '#4a235a', acc: '#c77dff', light: false },
-            { id: 'minimalista', label: 'Minimal', sb: '#f5f5f5', acc: '#222222', light: true },
-            { id: 'pastel_rosa', label: 'Pastel', sb: '#fde8ec', acc: '#c9485b', light: true },
-        ];
+        // Themes come from the server (themes.py) so the preview and the PDF
+        // (rendered from the same THEMES list) can never drift apart.
+        const TPLS = {{ themes_json | safe }};
 
         function buildTplGrid() {
             document.getElementById('tgrid').innerHTML = TPLS.map(t => {
@@ -1651,7 +1355,7 @@
         // ═══════════════════════════════ STATE ═══════════════════════════════════════
         let CUR_TPL = 'clasica_azul';
         let zv = 0.75;
-        let expN = 0, eduN = 0, skN = 0, lgN = 0, coN = 0, recN = 0;
+        let expN = 0, eduN = 0, skN = 0, lgN = 0, coN = 0, recN = 0, projN = 0;
         let curProfId = null;
         let photoB64 = null;
         let deb = null;
@@ -1664,7 +1368,7 @@
             "📁 Perfiles": { en: "📁 Profiles", es: "📁 Perfiles" },
             "⬇ Descargar PDF": { en: "⬇ Download PDF", es: "⬇ Descargar PDF" },
             "✏️ Editor": { en: "✏️ Editor", es: "✏️ Editor" },
-            "Plantilla (10 diseños)": { en: "Template (10 designs)", es: "Plantilla (10 diseños)" },
+            "Plantilla (11 diseños)": { en: "Template (11 designs)", es: "Plantilla (11 diseños)" },
             "Datos Personales": { en: "Personal Details", es: "Datos Personales" },
             "Perfil Profesional": { en: "Professional Profile", es: "Perfil Profesional" },
             "Experiencia Laboral": { en: "Work Experience", es: "Experiencia Laboral" },
@@ -1678,6 +1382,7 @@
             "Recomendaciones": { en: "Recommendations", es: "Recomendaciones" },
             "Intereses y Hobbies": { en: "Interests & Hobbies", es: "Intereses y Hobbies" },
             "Intereses": { en: "Interests", es: "Intereses" },
+            "Proyectos": { en: "Projects", es: "Proyectos" },
             "Perfil": { en: "Profile", es: "Perfil" },
             "Presente": { en: "Present", es: "Presente" },
             "Completa todos tus datos de contacto e identificación.": { en: "Fill out all your contact and identification details.", es: "Completa todos tus datos de contacto e identificación." },
@@ -1703,6 +1408,10 @@
             "Resumen": { en: "Summary", es: "Resumen" },
             "Empieza por el puesto más reciente.": { en: "Start with the most recent position.", es: "Empieza por el puesto más reciente." },
             "＋ Añadir experiencia": { en: "＋ Add Experience", es: "＋ Añadir experiencia" },
+            "Proyectos personales, freelance o de portafolio que muestren tu trabajo.": { en: "Personal, freelance, or portfolio projects that showcase your work.", es: "Proyectos personales, freelance o de portafolio que muestren tu trabajo." },
+            "＋ Añadir proyecto": { en: "＋ Add Project", es: "＋ Añadir proyecto" },
+            "Enlace": { en: "Link", es: "Enlace" },
+            "Tecnologías": { en: "Technologies", es: "Tecnologías" },
             "Cargo *": { en: "Position *", es: "Cargo *" },
             "Cargo": { en: "Position", es: "Cargo" },
             "Empresa *": { en: "Company *", es: "Empresa *" },
@@ -1868,11 +1577,31 @@
         zoom(0);
 
         // ═══════════════════════════════ PHOTO ═══════════════════════════════════════
+        // Phones routinely produce 4-12MB photos; a CV avatar only ever renders at
+        // ~80px. Downscaling client-side keeps saved profiles, the draft in
+        // localStorage, and the generated PDF small, and makes /remove-bg faster.
+        const PHOTO_MAX_SIDE = 500;
+        function downscalePhoto(dataUrl) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => {
+                    const scale = Math.min(1, PHOTO_MAX_SIDE / Math.max(img.width, img.height));
+                    const w = Math.round(img.width * scale), h = Math.round(img.height * scale);
+                    const canvas = document.createElement('canvas');
+                    canvas.width = w; canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    resolve(canvas.toDataURL('image/jpeg', 0.88));
+                };
+                img.onerror = () => reject(new Error('No se pudo leer la imagen'));
+                img.src = dataUrl;
+            });
+        }
         function loadPhoto(inp) {
             const f = inp.files[0]; if (!f) return;
             const r = new FileReader();
-            r.onload = e => {
-                photoB64 = e.target.result;
+            r.onload = async e => {
+                try { photoB64 = await downscalePhoto(e.target.result); }
+                catch (err) { toast('Error al cargar la foto', 'err'); return; }
                 document.getElementById('ph-img').src = photoB64;
                 document.getElementById('ph-img').style.display = 'block';
                 document.getElementById('ph-placeholder').style.display = 'none';
@@ -1935,6 +1664,19 @@
   </div>`);
             reTrans(document.getElementById(`exp-${id}`));
             updBadge('exp-', 'b-exp'); upd();
+        }
+        function addProj() {
+            const id = ++projN;
+            document.getElementById('proj-list').insertAdjacentHTML('beforeend', `
+  <div class="ic-card" id="proj-${id}">
+    <div class="ic-head"><span class="ic-title">Proyecto ${id}</span><button class="del-btn" onclick="del('proj-${id}');reTrans(document.getElementById('proj-${id}'));
+            updBadge('proj-','b-proj');upd()">✕</button></div>
+    <div class="r2"><div class="fg"><label>Nombre *</label><input id="prn-${id}" placeholder="Sistema de Facturación" oninput="upd()"></div><div class="fg"><label>Enlace</label><input id="prl-${id}" placeholder="github.com/usuario/proyecto" oninput="upd()"></div></div>
+    <div class="fg"><label>Tecnologías</label><input id="prt-${id}" placeholder="Next.js, AWS, PostgreSQL" oninput="upd()"></div>
+    <div class="fg"><label>Descripción</label><textarea id="prd-${id}" rows="3" placeholder="Qué resuelve el proyecto y tu rol en él…" oninput="upd()"></textarea></div>
+  </div>`);
+            reTrans(document.getElementById(`proj-${id}`));
+            updBadge('proj-', 'b-proj'); upd();
         }
 
         function addEdu() {
@@ -2023,7 +1765,9 @@
         }
         function updBadge(pfx, bid) {
             const el = document.getElementById(bid); if (!el) return;
-            el.textContent = document.querySelectorAll(`[id^="${pfx}"]`).length;
+            // Exclude the list container itself (e.g. "exp-list"), which also
+            // matches the "exp-" prefix and was inflating every count by one.
+            el.textContent = document.querySelectorAll(`[id^="${pfx}"]:not([id$="-list"])`).length;
         }
         const v = id => { const e = document.getElementById(id); return e ? e.value.trim() : ''; };
 
@@ -2035,9 +1779,11 @@
                 dni: v('f-dni'), birthdate: v('f-birth'), nationality: v('f-nat'),
                 address: v('f-addr'), gender: v('f-gen'), photo: photoB64 || null
             };
-            const experience = [], education = [], skills = [], languages = [], courses = [], recommendations = [];
+            const experience = [], education = [], skills = [], languages = [], courses = [], recommendations = [], projects = [];
             for (let i = 1; i <= expN; i++) if (document.getElementById(`exp-${i}`))
                 experience.push({ position: v(`ep-${i}`), company: v(`ec-${i}`), start_date: v(`es-${i}`), end_date: v(`ee-${i}`), description: v(`ed-${i}`) });
+            for (let i = 1; i <= projN; i++) if (document.getElementById(`proj-${i}`))
+                projects.push({ name: v(`prn-${i}`), link: v(`prl-${i}`), tech: v(`prt-${i}`), description: v(`prd-${i}`) });
             for (let i = 1; i <= eduN; i++) if (document.getElementById(`edu-${i}`))
                 education.push({ degree: v(`edg-${i}`), institution: v(`edi-${i}`), start_date: v(`eds-${i}`), end_date: v(`ede-${i}`) });
             for (let i = 1; i <= skN; i++) if (document.getElementById(`sk-${i}`)) {
@@ -2052,13 +1798,38 @@
                 recommendations.push({ name: v(`rn-${i}`), position: v(`rp-${i}`), company: v(`rc-${i}`), text: v(`rt-${i}`) });
             return {
                 lang: CURRENT_LANG, template: CUR_TPL, personal: p, summary: v('f-summary'),
-                experience, education, skills, languages, courses, recommendations, hobbies: v('f-hobbies')
+                experience, education, skills, languages, courses, recommendations, projects, hobbies: v('f-hobbies')
             };
         }
 
         // ═══════════════════════════════ LIVE PREVIEW ════════════════════════════════
-        function upd() { clearTimeout(deb); deb = setTimeout(renderPreview, 80); }
-        const sf = (s, d = '') => s || d;
+        const DRAFT_KEY = 'cvwizard_draft';
+        let draftTimer = null;
+        function upd() {
+            clearTimeout(deb); deb = setTimeout(renderPreview, 80);
+            clearTimeout(draftTimer); draftTimer = setTimeout(saveDraft, 500);
+        }
+        function saveDraft() {
+            try { localStorage.setItem(DRAFT_KEY, JSON.stringify(collect())); } catch (e) { }
+        }
+
+        // Escapes user-supplied text before it is interpolated into innerHTML.
+        // Every field below comes from the user (typed, CSV-imported, or loaded from
+        // a saved/imported profile), so it must never be treated as trusted markup.
+        const _escEl = document.createElement('div');
+        function escapeHtml(s) {
+            if (s === null || s === undefined) return '';
+            _escEl.textContent = String(s);
+            return _escEl.innerHTML;
+        }
+        const sf = (s, d = '') => escapeHtml(s || d);
+
+        // Only allow well-formed base64 image data URIs as photo src — blocks
+        // "javascript:" URIs or attribute-breakout payloads from a tampered profile.
+        function safePhotoSrc(photo) {
+            if (!photo || !/^data:image\/(png|jpe?g|webp);base64,[A-Za-z0-9+/=]+$/i.test(photo)) return '';
+            return photo;
+        }
 
         function shortLv(s) {
             if (!s) return 'B2';
@@ -2073,10 +1844,12 @@
             const cfg = TPLS.find(t => t.id === CUR_TPL) || TPLS[0];
             const nm = sf(p.name, t('Tu Nombre'));
             const init = nm.split(' ').slice(0, 2).map(x => x[0]?.toUpperCase() || '').join('');
+            const mSec = (title) => `<div class="cv-sec-title" style="color:${cfg.acc}">${title}</div><div class="cv-sec-line" style="background:${cfg.acc}"></div>`;
 
             // avatar HTML
-            const avHtml = p.photo
-                ? `<div class="av-wrap" style="border-color:${cfg.acc}"><img src="${p.photo}" alt="foto"></div>`
+            const photoSrc = safePhotoSrc(p.photo);
+            const avHtml = photoSrc
+                ? `<div class="av-wrap" style="border-color:${cfg.acc}"><img src="${photoSrc}" alt="foto"></div>`
                 : `<div class="av-init" style="background:${cfg.acc}">${init}</div>`;
 
             // contact items
@@ -2092,15 +1865,17 @@
             if (p.gender && p.gender !== '— No mostrar —') contacts.push(['👤', p.gender]);
 
             const contactHtml = contacts.map(([ic, val]) =>
-                `<div class="cv-sb-contact-item"><span class="cv-sb-contact-ic" style="color:${cfg.acc}">${ic}</span><span>${val}</span></div>`
+                `<div class="cv-sb-contact-item"><span class="cv-sb-contact-ic" style="color:${cfg.acc}">${ic}</span><span>${escapeHtml(val)}</span></div>`
             ).join('');
+            const contactHtmlFlat = contacts.map(([, val]) => `<span>${escapeHtml(val)}</span>`).join('');
 
-            // skills
+            // skills — bars for the sidebar layout, a plain text list for ATS
+            // (a bar-chart meter is pure graphics; an ATS text parser can't read it)
             const skillsHtml = data.skills.length
                 ? `<div class="cv-sb-sec">
-        <div class="cv-sb-sec-title" style="color:${cfg.acc}">Competencias</div>
+        <div class="cv-sb-sec-title" style="color:${cfg.acc}">${t('Competencias')}</div>
         <div class="cv-sb-sec-line"></div>
-        ${data.skills.slice(0, 12).map(sk => {
+        ${data.skills.slice(0, 30).map(sk => {
                     const lv = parseInt(sk.level || 3);
                     const bars = Array.from({ length: 5 }, (_, i) => `<div class="cv-sb-bar" style="background:${i < lv ? cfg.acc : (cfg.light ? '#cccccc' : 'rgba(255,255,255,.2)')}"></div>`).join('');
                     return `<div class="cv-sb-skill">
@@ -2109,11 +1884,13 @@
           </div>`;
                 }).join('')}
       </div>` : '';
+            const skillsHtmlAts = data.skills.length
+                ? `<div class="cv-sec">${mSec(t('Competencias'))}<div class="cv-ats-list">${data.skills.map(sk => `<span>${sf(sk.name)}</span>`).join('')}</div></div>` : '';
 
-            // languages
+            // languages — tag pills for the sidebar, "Nombre (Nivel)" for ATS
             const langsHtml = data.languages.length
                 ? `<div class="cv-sb-sec">
-        <div class="cv-sb-sec-title" style="color:${cfg.acc}">Idiomas</div>
+        <div class="cv-sb-sec-title" style="color:${cfg.acc}">${t('Idiomas')}</div>
         <div class="cv-sb-sec-line"></div>
         ${data.languages.map(lg => `
           <div class="cv-sb-lang">
@@ -2121,43 +1898,19 @@
             <span class="cv-sb-lang-tag" style="background:${cfg.acc}">${shortLv(lg.level || lg.speak)}</span>
           </div>`).join('')}
       </div>` : '';
-
-            // courses (sidebar)
-            const coursesHtml = data.courses.length
-                ? `<div class="cv-sb-sec">
-        <div class="cv-sb-sec-title" style="color:${cfg.acc}">Cursos</div>
-        <div class="cv-sb-sec-line"></div>
-        ${data.courses.slice(0, 4).map(co => `<div style="font-size:7.5px;margin-bottom:5px;line-height:1.4;padding-right:4px;${cfg.light ? 'color:#444' : 'color:rgba(255,255,255,.8)'}">${sf(co.name)}</div>`).join('')}
-      </div>` : '';
+            const langsHtmlAts = data.languages.length
+                ? `<div class="cv-sec">${mSec(t('Idiomas'))}<div class="cv-ats-list">${data.languages.map(lg => `<span>${sf(lg.name)} (${shortLv(lg.level || lg.speak)})</span>`).join('')}</div></div>` : '';
 
             const interestsHtml = data.hobbies
                 ? `<div class="cv-sb-sec">
-        <div class="cv-sb-sec-title" style="color:${cfg.acc}">Intereses</div>
+        <div class="cv-sb-sec-title" style="color:${cfg.acc}">${t('Intereses')}</div>
         <div class="cv-sb-sec-line"></div>
-        <div style="font-size:7.5px;line-height:1.5;padding-right:4px;${cfg.light ? 'color:#444' : 'color:rgba(255,255,255,.75)'}">${data.hobbies}</div>
+        <div style="font-size:7.5px;line-height:1.5;padding-right:4px;${cfg.light ? 'color:#444' : 'color:rgba(255,255,255,.75)'}">${escapeHtml(data.hobbies)}</div>
       </div>` : '';
+            const interestsHtmlAts = data.hobbies
+                ? `<div class="cv-sec">${mSec(t('Intereses'))}<div class="cv-summary">${escapeHtml(data.hobbies)}</div></div>` : '';
 
-            // main body
-            const mSec = (title) => `<div class="cv-sec-title" style="color:${cfg.acc}">${title}</div><div class="cv-sec-line" style="background:${cfg.acc}"></div>`;
-
-            let mainHtml = '';
-
-            if (data.summary)
-                mainHtml += `<div class="cv-sec">${mSec(t('Perfil'))}<div class="cv-summary">${data.summary}</div></div>`;
-
-            if (data.experience?.length) {
-                mainHtml += `<div class="cv-sec">${mSec(t('Experiencia'))}`;
-                data.experience.slice(0, 5).forEach(e => {
-                    mainHtml += `<div class="cv-exp">
-        <div class="cv-exp-row"><div class="cv-exp-pos" style="color:#1a1a2e">${sf(e.position)}</div><div class="cv-exp-date">${sf(e.start_date)} - ${sf(e.end_date, t('Presente'))}</div></div>
-        <div class="cv-exp-co" style="color:${cfg.acc}">${sf(e.company)}</div>
-        ${e.description ? `<div class="cv-exp-desc">${e.description}</div>` : ''}
-      </div>`;
-                });
-                mainHtml += '</div>';
-            }
-
-            // recommendations (sidebar)
+            // recommendations — capped teaser in the sidebar, full cards for ATS
             const recsHtml_sb = data.recommendations?.length
                 ? `<div class="cv-sb-sec">
         <div class="cv-sb-sec-title" style="color:${cfg.acc}">${t('Recomendaciones')}</div>
@@ -2166,46 +1919,96 @@
           <div style="margin-bottom:8px">
             <div style="font-size:8px;font-weight:700;color:${cfg.light ? '#111' : '#fff'}">${sf(r.name)}</div>
             <div style="font-size:7px;color:${cfg.acc};font-style:italic">${sf(r.position)}</div>
-            ${r.text ? `<div style="font-size:7px;line-height:1.3;margin-top:2px;${cfg.light ? 'color:#444' : 'color:rgba(255,255,255,.7)'}">"${r.text}"</div>` : ''}
+            ${r.text ? `<div style="font-size:7px;line-height:1.3;margin-top:2px;${cfg.light ? 'color:#444' : 'color:rgba(255,255,255,.7)'}">"${escapeHtml(r.text)}"</div>` : ''}
+          </div>`).join('')}
+      </div>` : '';
+            const recsHtmlAts = data.recommendations?.length
+                ? `<div class="cv-sec">${mSec(t('Recomendaciones'))}
+        ${data.recommendations.map(r => `
+          <div class="cv-rec" style="border-color:${cfg.acc}">
+            <div class="cv-rec-name">${sf(r.name)}</div>
+            ${r.position ? `<div class="cv-rec-role" style="color:${cfg.acc}">${sf(r.position)}</div>` : ''}
+            ${r.text ? `<div class="cv-rec-text">"${escapeHtml(r.text)}"</div>` : ''}
           </div>`).join('')}
       </div>` : '';
 
+            // main column: shared between the sidebar and ATS layouts
+            let summaryHtml = data.summary ? `<div class="cv-sec">${mSec(t('Perfil'))}<div class="cv-summary">${escapeHtml(data.summary)}</div></div>` : '';
+
+            let expHtml = '';
+            if (data.experience?.length) {
+                expHtml = `<div class="cv-sec">${mSec(t('Experiencia'))}`;
+                data.experience.slice(0, 15).forEach(e => {
+                    expHtml += `<div class="cv-exp">
+        <div class="cv-exp-row"><div class="cv-exp-pos" style="color:#1a1a2e">${sf(e.position)}</div><div class="cv-exp-date">${sf(e.start_date)} - ${sf(e.end_date, t('Presente'))}</div></div>
+        <div class="cv-exp-co" style="color:${cfg.acc}">${sf(e.company)}</div>
+        ${e.description ? `<div class="cv-exp-desc">${escapeHtml(e.description)}</div>` : ''}
+      </div>`;
+                });
+                expHtml += '</div>';
+            }
+
+            let projHtml = '';
+            if (data.projects?.length) {
+                projHtml = `<div class="cv-sec">${mSec(t('Proyectos'))}`;
+                data.projects.forEach(pr => {
+                    projHtml += `<div class="cv-exp">
+        <div class="cv-exp-row"><div class="cv-exp-pos" style="color:#1a1a2e">${sf(pr.name)}</div>${pr.link ? `<div class="cv-exp-date">${sf(pr.link)}</div>` : ''}</div>
+        ${pr.tech ? `<div class="cv-exp-co" style="color:${cfg.acc}">${sf(pr.tech)}</div>` : ''}
+        ${pr.description ? `<div class="cv-exp-desc">${escapeHtml(pr.description)}</div>` : ''}
+      </div>`;
+                });
+                projHtml += '</div>';
+            }
+
+            let eduHtml = '';
             if (data.education?.length) {
-                mainHtml += `<div class="cv-sec">${mSec(t('Formación'))}`;
-                data.education.slice(0, 3).forEach(e => {
-                    mainHtml += `<div class="cv-exp">
+                eduHtml = `<div class="cv-sec">${mSec(t('Formación'))}`;
+                data.education.slice(0, 10).forEach(e => {
+                    eduHtml += `<div class="cv-exp">
         <div class="cv-exp-row"><div class="cv-exp-pos" style="color:#1a1a2e">${sf(e.degree)}</div><div class="cv-exp-date">${sf(e.start_date)} - ${sf(e.end_date, t('Presente'))}</div></div>
         <div class="cv-exp-co" style="color:${cfg.acc}">${sf(e.institution)}</div>
       </div>`;
                 });
-                mainHtml += '</div>';
+                eduHtml += '</div>';
             }
 
+            let courseHtml = '';
             if (data.courses?.length) {
-                mainHtml += `<div class="cv-sec">${mSec(t('Cursos y Certificaciones'))}`;
+                courseHtml = `<div class="cv-sec">${mSec(t('Cursos y Certificaciones'))}`;
                 data.courses.forEach(co => {
-                    mainHtml += `<div class="cv-course-item"><div class="cv-course-dot" style="background:${cfg.acc}"></div><span>${sf(co.name)}${co.institution ? ` <span style="color:#999;font-size:7.5px">· ${co.institution}</span>` : ''}</span><span class="cv-course-yr">${sf(co.year)}</span></div>`;
+                    courseHtml += `<div class="cv-course-item"><div class="cv-course-dot" style="background:${cfg.acc}"></div><span>${sf(co.name)}${co.institution ? ` <span style="color:#999;font-size:7.5px">· ${escapeHtml(co.institution)}</span>` : ''}</span><span class="cv-course-yr">${sf(co.year)}</span></div>`;
                 });
-                mainHtml += '</div>';
+                courseHtml += '</div>';
             }
 
-            const lightClass = cfg.light ? ' light' : '';
-            const html = `<div class="cv-sb-layout">
+            let html;
+            if (cfg.layout === 'single') {
+                // ═══ ATS single-column layout ═══
+                html = `<div class="cv-ats">
+    <div class="cv-ats-header">
+      <div class="cv-ats-name">${nm}</div>
+      <div class="cv-ats-title" style="color:${cfg.acc}">${sf(p.title)}</div>
+      <div class="cv-ats-contacts">${contactHtmlFlat}</div>
+    </div>
+    ${summaryHtml}${expHtml}${projHtml}${eduHtml}${skillsHtmlAts}${langsHtmlAts}${courseHtml}${recsHtmlAts}${interestsHtmlAts}
+  </div>`;
+            } else {
+                // ═══ sidebar layout ═══
+                const lightClass = cfg.light ? ' light' : '';
+                html = `<div class="cv-sb-layout">
     <div class="cv-sb${lightClass}" style="background:${cfg.sb};width:200px">
       <div class="cv-sb-header">
         ${avHtml}
-        <div class="cv-sb-name">${nm}</div>
-        <div class="cv-sb-title" style="color:${cfg.acc}">${sf(p.title)}</div>
       </div>
       <div class="cv-sb-body">
         <div class="cv-sb-sec" style="margin-top:4px">
-          <div class="cv-sb-sec-title" style="color:${cfg.acc}">Datos Personales</div>
+          <div class="cv-sb-sec-title" style="color:${cfg.acc}">${t('Datos Personales')}</div>
           <div class="cv-sb-sec-line"></div>
           ${contactHtml}
         </div>
         ${skillsHtml}
         ${langsHtml}
-        ${coursesHtml}
         ${interestsHtml}
         ${recsHtml_sb}
       </div>
@@ -2214,11 +2017,38 @@
       <div class="cv-main-name" style="color:#1a1a2e">${nm}</div>
       <div class="cv-main-title" style="color:${cfg.acc}">${sf(p.title)}</div>
       <div class="cv-main-rule" style="background:${cfg.acc}"></div>
-      ${mainHtml}
+      ${summaryHtml}${expHtml}${projHtml}${eduHtml}${courseHtml}
     </div>
   </div>`;
+            }
 
             document.getElementById('cv-wrap').innerHTML = html;
+            updatePageBreaks();
+        }
+
+        // The generated PDF paginates a real A4 page every 848px of this
+        // design's content height (see pdf_render.py's PDF_SCALE, which maps
+        // this exact 600x848 mockup onto a physical A4 page). Mirroring that
+        // here lets the editor show where a page break will land instead of
+        // only finding out after downloading the PDF.
+        const PDF_PAGE_HEIGHT_PX = 848;
+        function updatePageBreaks() {
+            const wrap = document.getElementById('cv-wrap');
+            wrap.querySelectorAll('.page-break-guide').forEach(g => g.remove());
+            const totalHeight = wrap.scrollHeight;
+            const pageCount = Math.max(1, Math.ceil(totalHeight / PDF_PAGE_HEIGHT_PX));
+            for (let i = 1; i < pageCount; i++) {
+                const guide = document.createElement('div');
+                guide.className = 'page-break-guide';
+                guide.style.top = (PDF_PAGE_HEIGHT_PX * i) + 'px';
+                guide.innerHTML = `<span>Página ${i + 1} ↓</span>`;
+                wrap.appendChild(guide);
+            }
+            const badge = document.getElementById('page-badge');
+            if (badge) {
+                badge.textContent = pageCount === 1 ? '1 página' : `${pageCount} páginas`;
+                badge.classList.toggle('warn', pageCount > 1);
+            }
         }
 
         // ═══════════════════════════════ CSV ════════════════════════════════════════
@@ -2251,12 +2081,13 @@
             if (!ps.length) { el.innerHTML = '<div class="empty"><div class="ei">📄</div><p>Sin perfiles guardados.<br>Completa tu CV y pulsa <strong>Guardar</strong>.</p></div>'; return; }
             el.innerHTML = ps.map(p => {
                 const init = (p.cv_name || p.name || 'CV').split(' ').slice(0, 2).map(x => x[0]?.toUpperCase() || '').join('');
-                return `<div class="pro-card" onclick="loadProfile('${p.id}')">
-      <div class="pro-av">${init}</div>
-      <div class="pro-info"><div class="pro-name">${p.name}</div><div class="pro-meta">${p.cv_name || ''}${p.updated ? ' · ' + p.updated : ''}</div></div>
-      <div class="pro-tpl">${p.template}</div>
+                const pid = escapeHtml(p.id);
+                return `<div class="pro-card" onclick="loadProfile('${pid}')">
+      <div class="pro-av">${escapeHtml(init)}</div>
+      <div class="pro-info"><div class="pro-name">${sf(p.name)}</div><div class="pro-meta">${sf(p.cv_name)}${p.updated ? ' · ' + sf(p.updated) : ''}</div></div>
+      <div class="pro-tpl">${sf(p.template)}</div>
       <div class="pro-act" onclick="event.stopPropagation()">
-        <button class="ico-btn" onclick="delProfile('${p.id}')">🗑</button>
+        <button class="ico-btn" onclick="delProfile('${pid}')">🗑</button>
       </div>
     </div>`;
             }).join('');
@@ -2271,9 +2102,29 @@
             loadProfiles(); toast('Perfil eliminado');
         }
 
+        // Full-profile JSON backup — independent from the row-based CSV import,
+        // this round-trips every field losslessly (useful before reinstalling,
+        // or to move a CV between machines).
+        function exportProfileBackup() {
+            const d = collect();
+            const blob = new Blob([JSON.stringify(d, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `cv_backup_${(d.personal.name || 'CV').replace(/\s+/g, '_')}.json`;
+            a.click();
+        }
+        async function importProfileBackup(file) {
+            if (!file) return;
+            try {
+                const data = JSON.parse(await file.text());
+                curProfId = null;
+                restoreData(data); showPane('edit'); toast('✓ Respaldo importado');
+            } catch (e) { toast('Archivo de respaldo inválido', 'err'); }
+        }
+
         function restoreData(data) {
-            ['exp-list', 'edu-list', 'sk-list', 'lg-list', 'co-list', 'rec-list'].forEach(id => document.getElementById(id).innerHTML = '');
-            expN = eduN = skN = lgN = coN = recN = 0;
+            ['exp-list', 'edu-list', 'sk-list', 'lg-list', 'co-list', 'rec-list', 'proj-list'].forEach(id => document.getElementById(id).innerHTML = '');
+            expN = eduN = skN = lgN = coN = recN = projN = 0;
             const set = (id, val) => { const e = document.getElementById(id); if (e) e.value = val || '' };
             const p = data.personal || {};
             set('f-name', p.name); set('f-title', p.title); set('f-email', p.email);
@@ -2282,9 +2133,10 @@
             set('f-nat', p.nationality); set('f-addr', p.address);
             const gs = document.getElementById('f-gen'); if (gs && p.gender) gs.value = p.gender;
             set('f-summary', data.summary); set('f-hobbies', data.hobbies);
-            if (p.photo) { photoB64 = p.photo; const img = document.getElementById('ph-img'); img.src = p.photo; img.style.display = 'block'; document.getElementById('ph-placeholder').style.display = 'none'; document.getElementById('ph-circle').style.border = '2px solid var(--acc)'; document.getElementById('ph-clear-btn').style.display = 'flex'; document.getElementById('ph-rmbg-btn').style.display = 'flex'; }
+            if (p.photo && safePhotoSrc(p.photo)) { photoB64 = p.photo; const img = document.getElementById('ph-img'); img.src = p.photo; img.style.display = 'block'; document.getElementById('ph-placeholder').style.display = 'none'; document.getElementById('ph-circle').style.border = '2px solid var(--acc)'; document.getElementById('ph-clear-btn').style.display = 'flex'; document.getElementById('ph-rmbg-btn').style.display = 'flex'; }
             else { clearPhoto(); }
             (data.experience || []).forEach(e => { addExp(); set(`ep-${expN}`, e.position); set(`ec-${expN}`, e.company); set(`es-${expN}`, e.start_date); set(`ee-${expN}`, e.end_date); set(`ed-${expN}`, e.description); });
+            (data.projects || []).forEach(pr => { addProj(); set(`prn-${projN}`, pr.name); set(`prl-${projN}`, pr.link); set(`prt-${projN}`, pr.tech); set(`prd-${projN}`, pr.description); });
             (data.education || []).forEach(e => { addEdu(); set(`edg-${eduN}`, e.degree); set(`edi-${eduN}`, e.institution); set(`eds-${eduN}`, e.start_date); set(`ede-${eduN}`, e.end_date); });
             (data.skills || []).forEach(s => { addSk(); set(`skn-${skN}`, s.name); setLv(skN, parseInt(s.level || s.level_speak || 3)); });
             (data.languages || []).forEach(l => { addLg(); set(`lgn-${lgN}`, l.name); const sl = document.getElementById(`lgl-${lgN}`); if (sl) { const lv = l.level || l.speak || ''; const opt = [...sl.options].find(o => o.text.toLowerCase().startsWith(lv.toLowerCase().slice(0, 3))); if (opt) sl.value = opt.value; else sl.value = sl.options[3].value; } });
@@ -2297,6 +2149,13 @@
             }
 
             document.querySelectorAll('.tc').forEach(c => c.classList.toggle('on', c.getAttribute('onclick')?.includes(`'${CUR_TPL}'`)));
+            // addX() already refreshes its own badge, but a section that ends
+            // up empty (e.g. loading a profile with no skills) never calls
+            // addSk(), so its badge would otherwise keep showing the stale
+            // count left over from whatever was loaded before.
+            updBadge('exp-', 'b-exp'); updBadge('proj-', 'b-proj'); updBadge('edu-', 'b-edu');
+            updBadge('sk-', 'b-sk'); updBadge('lg-', 'b-lg'); updBadge('co-', 'b-co');
+            updBadge('rec-', 'b-rec');
             upd();
         }
 
@@ -2307,13 +2166,16 @@
             document.getElementById('overlay').classList.add('show');
             try {
                 const r = await fetch('/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) });
-                if (!r.ok) throw new Error();
+                if (!r.ok) {
+                    const j = await r.json().catch(() => ({}));
+                    throw new Error(j.error || 'Error al generar PDF');
+                }
                 const blob = await r.blob();
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(blob);
                 a.download = `CV_${d.personal.name.replace(/\s+/g, '_')}.pdf`;
                 a.click(); toast('✓ PDF descargado');
-            } catch (e) { toast('Error al generar PDF', 'err'); }
+            } catch (e) { toast(e.message || 'Error al generar PDF', 'err'); }
             finally { document.getElementById('overlay').classList.remove('show'); }
         }
 
@@ -2323,7 +2185,18 @@
         document.getElementById('pro-name-inp').addEventListener('keydown', e => { if (e.key === 'Enter') saveProfile(); });
 
         // ═══════════════════════════════ INIT ════════════════════════════════════════
-        addExp(); addEdu(); addSk(); addLg();
+        function restoreDraftIfAny() {
+            let draft = null;
+            try { draft = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null'); } catch (e) { }
+            if (draft && (draft.personal?.name || draft.summary || draft.experience?.length)) {
+                restoreData(draft);
+                toast('✓ Borrador recuperado automáticamente');
+                return true;
+            }
+            return false;
+        }
+
+        if (!restoreDraftIfAny()) { addExp(); addEdu(); addSk(); addLg(); }
         showPane('edit');
         renderPreview();
     </script>

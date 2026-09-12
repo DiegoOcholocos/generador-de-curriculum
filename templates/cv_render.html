@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+<meta charset="utf-8">
+<style>{{ css | safe }}</style>
+</head>
+<body class="pdf-mode">
+  <div class="cv-doc">
+    <div class="cv-wrap">
+      {% if cfg.layout == 'single' %}
+      {# ═══════════ ATS / single-column layout ═══════════ #}
+      <div class="cv-ats">
+        <div class="cv-ats-header">
+          <div class="cv-ats-name">{{ name }}</div>
+          <div class="cv-ats-title" style="color:{{ cfg.acc }}">{{ title }}</div>
+          <div class="cv-ats-contacts">
+            {% for ic, val in contacts %}<span>{{ val }}</span>{% endfor %}
+          </div>
+        </div>
+
+        {% if summary %}
+        <div class="cv-sec">
+          <div class="cv-sec-title" style="color:{{ cfg.acc }}">{{ t.profile }}</div>
+          <div class="cv-sec-line" style="background:{{ cfg.acc }}"></div>
+          <div class="cv-summary">{{ summary }}</div>
+        </div>
+        {% endif %}
+
+        {% if experience %}
+        <div class="cv-sec">
+          <div class="cv-sec-title" style="color:{{ cfg.acc }}">{{ t.experience }}</div>
+          <div class="cv-sec-line" style="background:{{ cfg.acc }}"></div>
+          {% for e in experience[:15] %}
+          <div class="cv-exp">
+            <div class="cv-exp-row"><div class="cv-exp-pos" style="color:#1a1a2e">{{ e.position }}</div><div class="cv-exp-date">{{ e.start_date }} - {{ e.end_date }}</div></div>
+            <div class="cv-exp-co" style="color:{{ cfg.acc }}">{{ e.company }}</div>
+            {% if e.description %}<div class="cv-exp-desc">{{ e.description }}</div>{% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if projects %}
+        <div class="cv-sec">
+          <div class="cv-sec-title" style="color:{{ cfg.acc }}">{{ t.projects }}</div>
+          <div class="cv-sec-line" style="background:{{ cfg.acc }}"></div>
+          {% for p in projects %}
+          <div class="cv-exp">
+            <div class="cv-exp-row"><div class="cv-exp-pos" style="color:#1a1a2e">{{ p.name }}</div>{% if p.link %}<div class="cv-exp-date">{{ p.link }}</div>{% endif %}</div>
+            {% if p.tech %}<div class="cv-exp-co" style="color:{{ cfg.acc }}">{{ p.tech }}</div>{% endif %}
+            {% if p.description %}<div class="cv-exp-desc">{{ p.description }}</div>{% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if education %}
+        <div class="cv-sec">
+          <div class="cv-sec-title" style="color:{{ cfg.acc }}">{{ t.education }}</div>
+          <div class="cv-sec-line" style="background:{{ cfg.acc }}"></div>
+          {% for e in education[:10] %}
+          <div class="cv-exp">
+            <div class="cv-exp-row"><div class="cv-exp-pos" style="color:#1a1a2e">{{ e.degree }}</div><div class="cv-exp-date">{{ e.start_date }} - {{ e.end_date }}</div></div>
+            <div class="cv-exp-co" style="color:{{ cfg.acc }}">{{ e.institution }}</div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if skills %}
+        <div class="cv-sec">
+          <div class="cv-sec-title" style="color:{{ cfg.acc }}">{{ t.skills }}</div>
+          <div class="cv-sec-line" style="background:{{ cfg.acc }}"></div>
+          <div class="cv-ats-list">{% for sk in skills %}<span>{{ sk.name }}</span>{% endfor %}</div>
+        </div>
+        {% endif %}
+
+        {% if languages %}
+        <div class="cv-sec">
+          <div class="cv-sec-title" style="color:{{ cfg.acc }}">{{ t.languages }}</div>
+          <div class="cv-sec-line" style="background:{{ cfg.acc }}"></div>
+          <div class="cv-ats-list">{% for lg in languages %}<span>{{ lg.name }} ({{ lg.level_label }})</span>{% endfor %}</div>
+        </div>
+        {% endif %}
+
+        {% if courses %}
+        <div class="cv-sec">
+          <div class="cv-sec-title" style="color:{{ cfg.acc }}">{{ t.courses }}</div>
+          <div class="cv-sec-line" style="background:{{ cfg.acc }}"></div>
+          {% for co in courses %}
+          <div class="cv-course-item">
+            <div class="cv-course-dot" style="background:{{ cfg.acc }}"></div>
+            <span>{{ co.name }}{% if co.institution %} <span style="color:#999;font-size:7.5px">· {{ co.institution }}</span>{% endif %}</span>
+            <span class="cv-course-yr">{{ co.year }}</span>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if recommendations %}
+        <div class="cv-sec">
+          <div class="cv-sec-title" style="color:{{ cfg.acc }}">{{ t.recommendations }}</div>
+          <div class="cv-sec-line" style="background:{{ cfg.acc }}"></div>
+          {% for r in recommendations %}
+          <div class="cv-rec" style="border-color:{{ cfg.acc }}">
+            <div class="cv-rec-name">{{ r.name }}</div>
+            {% if r.position %}<div class="cv-rec-role" style="color:{{ cfg.acc }}">{{ r.position }}</div>{% endif %}
+            {% if r.text %}<div class="cv-rec-text">"{{ r.text }}"</div>{% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if hobbies %}
+        <div class="cv-sec">
+          <div class="cv-sec-title" style="color:{{ cfg.acc }}">{{ t.interests }}</div>
+          <div class="cv-sec-line" style="background:{{ cfg.acc }}"></div>
+          <div class="cv-summary">{{ hobbies }}</div>
+        </div>
+        {% endif %}
+      </div>
+      {% else %}
+      {# ═══════════ Sidebar layout ═══════════ #}
+      <div class="cv-sb-layout">
+        <div class="cv-sb-bg" style="background:{{ cfg.sb }}"></div>
+        <div class="cv-sb{{ ' light' if cfg.light else '' }}" style="width:200px">
+          <div class="cv-sb-header">
+            {% if photo_src %}
+            <div class="av-wrap" style="border-color:{{ cfg.acc }}"><img src="{{ photo_src }}" alt="foto"></div>
+            {% else %}
+            <div class="av-init" style="background:{{ cfg.acc }}">{{ initials }}</div>
+            {% endif %}
+          </div>
+          <div class="cv-sb-body">
+            <div class="cv-sb-sec" style="margin-top:4px">
+              <div class="cv-sb-sec-title" style="color:{{ cfg.acc }}">{{ t.personal }}</div>
+              <div class="cv-sb-sec-line"></div>
+              {% for ic, val in contacts %}
+              <div class="cv-sb-contact-item"><span class="cv-sb-contact-ic" style="color:{{ cfg.acc }}">{{ ic }}</span><span>{{ val }}</span></div>
+              {% endfor %}
+            </div>
+
+            {% if skills %}
+            <div class="cv-sb-sec">
+              <div class="cv-sb-sec-title" style="color:{{ cfg.acc }}">{{ t.skills }}</div>
+              <div class="cv-sb-sec-line"></div>
+              {% for sk in skills[:30] %}
+              <div class="cv-sb-skill">
+                <div class="cv-sb-skill-name">{{ sk.name }}</div>
+                <div class="cv-sb-bars">
+                  {% for i in range(5) %}
+                  <div class="cv-sb-bar" style="background:{{ cfg.acc if i < sk.level else ('#cccccc' if cfg.light else 'rgba(255,255,255,.2)') }}"></div>
+                  {% endfor %}
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if languages %}
+            <div class="cv-sb-sec">
+              <div class="cv-sb-sec-title" style="color:{{ cfg.acc }}">{{ t.languages }}</div>
+              <div class="cv-sb-sec-line"></div>
+              {% for lg in languages %}
+              <div class="cv-sb-lang">
+                <span>{{ lg.name }}</span>
+                <span class="cv-sb-lang-tag" style="background:{{ cfg.acc }}">{{ lg.level_label }}</span>
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if hobbies %}
+            <div class="cv-sb-sec">
+              <div class="cv-sb-sec-title" style="color:{{ cfg.acc }}">{{ t.interests }}</div>
+              <div class="cv-sb-sec-line"></div>
+              <div style="font-size:7.5px;line-height:1.5;padding-right:4px;{{ 'color:#444' if cfg.light else 'color:rgba(255,255,255,.75)' }}">{{ hobbies }}</div>
+            </div>
+            {% endif %}
+
+            {% if recommendations %}
+            <div class="cv-sb-sec">
+              <div class="cv-sb-sec-title" style="color:{{ cfg.acc }}">{{ t.recommendations }}</div>
+              <div class="cv-sb-sec-line"></div>
+              {% for r in recommendations[:2] %}
+              <div style="margin-bottom:8px">
+                <div style="font-size:8px;font-weight:700;color:{{ '#111' if cfg.light else '#fff' }}">{{ r.name }}</div>
+                <div style="font-size:7px;color:{{ cfg.acc }};font-style:italic">{{ r.position }}</div>
+                {% if r.text %}<div style="font-size:7px;line-height:1.3;margin-top:2px;{{ 'color:#444' if cfg.light else 'color:rgba(255,255,255,.7)' }}">"{{ r.text }}"</div>{% endif %}
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="cv-main">
+          <div class="cv-main-name" style="color:#1a1a2e">{{ name }}</div>
+          <div class="cv-main-title" style="color:{{ cfg.acc }}">{{ title }}</div>
+          <div class="cv-main-rule" style="background:{{ cfg.acc }}"></div>
+
+          {% if summary %}
+          <div class="cv-sec">
+            <div class="cv-sec-title" style="color:{{ cfg.acc }}">{{ t.profile }}</div>
+            <div class="cv-sec-line" style="background:{{ cfg.acc }}"></div>
+            <div class="cv-summary">{{ summary }}</div>
+          </div>
+          {% endif %}
+
+          {% if experience %}
+          <div class="cv-sec">
+            <div class="cv-sec-title" style="color:{{ cfg.acc }}">{{ t.experience }}</div>
+            <div class="cv-sec-line" style="background:{{ cfg.acc }}"></div>
+            {% for e in experience[:15] %}
+            <div class="cv-exp">
+              <div class="cv-exp-row"><div class="cv-exp-pos" style="color:#1a1a2e">{{ e.position }}</div><div class="cv-exp-date">{{ e.start_date }} - {{ e.end_date }}</div></div>
+              <div class="cv-exp-co" style="color:{{ cfg.acc }}">{{ e.company }}</div>
+              {% if e.description %}<div class="cv-exp-desc">{{ e.description }}</div>{% endif %}
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          {% if projects %}
+          <div class="cv-sec">
+            <div class="cv-sec-title" style="color:{{ cfg.acc }}">{{ t.projects }}</div>
+            <div class="cv-sec-line" style="background:{{ cfg.acc }}"></div>
+            {% for p in projects %}
+            <div class="cv-exp">
+              <div class="cv-exp-row"><div class="cv-exp-pos" style="color:#1a1a2e">{{ p.name }}</div>{% if p.link %}<div class="cv-exp-date">{{ p.link }}</div>{% endif %}</div>
+              {% if p.tech %}<div class="cv-exp-co" style="color:{{ cfg.acc }}">{{ p.tech }}</div>{% endif %}
+              {% if p.description %}<div class="cv-exp-desc">{{ p.description }}</div>{% endif %}
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          {% if education %}
+          <div class="cv-sec">
+            <div class="cv-sec-title" style="color:{{ cfg.acc }}">{{ t.education }}</div>
+            <div class="cv-sec-line" style="background:{{ cfg.acc }}"></div>
+            {% for e in education[:10] %}
+            <div class="cv-exp">
+              <div class="cv-exp-row"><div class="cv-exp-pos" style="color:#1a1a2e">{{ e.degree }}</div><div class="cv-exp-date">{{ e.start_date }} - {{ e.end_date }}</div></div>
+              <div class="cv-exp-co" style="color:{{ cfg.acc }}">{{ e.institution }}</div>
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          {% if courses %}
+          <div class="cv-sec">
+            <div class="cv-sec-title" style="color:{{ cfg.acc }}">{{ t.courses }}</div>
+            <div class="cv-sec-line" style="background:{{ cfg.acc }}"></div>
+            {% for co in courses %}
+            <div class="cv-course-item">
+              <div class="cv-course-dot" style="background:{{ cfg.acc }}"></div>
+              <span>{{ co.name }}{% if co.institution %} <span style="color:#999;font-size:7.5px">· {{ co.institution }}</span>{% endif %}</span>
+              <span class="cv-course-yr">{{ co.year }}</span>
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>
